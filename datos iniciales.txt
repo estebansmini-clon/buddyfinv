@@ -1,0 +1,32 @@
+-- 1) (Opcional) Asegura roles básicos
+INSERT INTO roles (descripcion)
+SELECT r FROM (VALUES ('ADMIN'), ('EMPLEADO')) AS t(r)
+WHERE NOT EXISTS (SELECT 1 FROM roles rr WHERE rr.descripcion = t.r);
+
+-- 2) Inserta 1 administrador y guarda su id
+WITH admin_ins AS (
+  INSERT INTO usuarios (nit_usuario, nombre, email, usuario, password, negocio, id_rol)
+  VALUES (
+    'A-0001',
+    'Admin Principal',
+    'admin@demo.com',
+    'admin',
+    'Admin123*',              -- texto plano
+    'Central',
+    (SELECT id_rol FROM roles WHERE descripcion = 'ADMIN')
+  )
+  RETURNING id
+)
+
+-- 3) Inserta 10 empleados, ligándolos al admin
+INSERT INTO usuarios (nit_usuario, nombre, email, usuario, password, negocio, id_rol, id_administrador)
+SELECT
+  FORMAT('E-%04s', gs)::text                          AS nit_usuario,
+  FORMAT('Empleado %s', gs)                           AS nombre,
+  FORMAT('empleado%s@demo.com', gs)                   AS email,
+  FORMAT('empleado%s', gs)                            AS usuario,
+  FORMAT('Empleado%s*', gs)                           AS password,   -- texto plano
+  FORMAT('Sucursal %s', ((gs-1)%3)+1)                 AS negocio,
+  (SELECT id_rol FROM roles WHERE descripcion='EMPLEADO') AS id_rol,
+  (SELECT id FROM admin_ins)                          AS id_administrador
+FROM generate_series(1, 10) AS gs;

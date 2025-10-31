@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendbuddyfinvApplication<backendbuddyfinv>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.es.backendbuddyfinv.BackendbuddyfinvApplication",
+            "projectName": "backendbuddyfinv",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
