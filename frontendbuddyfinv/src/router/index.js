@@ -1,18 +1,36 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../views/LoginView.vue'
+import UserTable from '../components/UserTable.vue'
+import DashboardOpciones from '@/views/DashboardOpciones.vue'
 import DashboardLayout from '../layouts/DashboardLayout.vue'
+import VentaView from '../views/VentaView.vue'
+import IngresoTable from '../components/IngresoTable.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
-    component: LoginView
+    component: () => import('../views/LoginView.vue')
   },
+  
+  
+  {
+    path: '/',
+    name: 'VentaView',
+    component: VentaView
+
+  },
+  
   {
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardLayout
+  },
+
+  {
+    path: '/listaingresos',
+    name: 'Ingresos',
+    component: IngresoTable
   }
 ]
 
