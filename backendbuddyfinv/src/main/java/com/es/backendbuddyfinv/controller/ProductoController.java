@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 //import com.es.backendbuddyfinv.repository.ProductoRepository;
+import com.es.backendbuddyfinv.repository.InventarioRepository;
 import com.es.backendbuddyfinv.service.impl.ProductoService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,9 @@ public class ProductoController {
 
      @Autowired
     private ProductoService productoService ;
+    
+    @Autowired
+    private InventarioRepository inventarioRepository;
 
     //metodo para obtener todos los productos
     @GetMapping("/all")
@@ -50,9 +54,13 @@ public class ProductoController {
          System.out.println("Productos encontrados: " + productos.size());
 
 
-        // Convertir a DTOs para evitar referencias circulares
+        // Convertir a DTOs para evitar referencias circulares, incluyendo cantidadDisponible
         List<ProductoDTO> productosDTO = productos.stream()
-            .map(ProductoDTO::new )
+            .map(producto -> {
+                // Calcular la cantidad disponible sumando todos los inventarios del producto
+                Integer cantidadDisponible = inventarioRepository.sumarCantidadDisponiblePorProducto(producto.getIdProducto());
+                return new ProductoDTO(producto, cantidadDisponible);
+            })
             .collect(Collectors.toList());
             
         return ResponseEntity.ok(productosDTO);
@@ -67,7 +75,11 @@ public class ProductoController {
     public ResponseEntity<List<ProductoDTO>> obtenerProductosPorUsuario(@PathVariable Long id) {
         List<Producto> productos = productoService.getProductosPorUsuario(id);
         List<ProductoDTO> productosDTO = productos.stream()
-            .map(ProductoDTO::new)
+            .map(producto -> {
+                // Calcular la cantidad disponible sumando todos los inventarios del producto
+                Integer cantidadDisponible = inventarioRepository.sumarCantidadDisponiblePorProducto(producto.getIdProducto());
+                return new ProductoDTO(producto, cantidadDisponible);
+            })
             .collect(Collectors.toList());
         return ResponseEntity.ok(productosDTO);
     }

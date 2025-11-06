@@ -9,8 +9,8 @@
           <th @click="ordenar('nombre')">Nombre</th>
           <th @click="ordenar('precio')">Precio</th>
           <th @click="ordenar('tipoProducto')">Tipo</th>
-          <th @click="ordenar('estadoProducto')">Estado</th>
           <th @click="ordenar('propietario')">Propietario</th>
+          <th @click="ordenar('cantidadDisponible')">Cantidad Disponible</th>
         </tr>
       </thead>
 
@@ -20,8 +20,8 @@
           <td>{{ producto.nombre }}</td>
           <td>{{ producto.precio }}</td>
           <td>{{ producto.tipoProducto }}</td>
-          <td>{{ producto.estadoProducto }}</td>
           <td>{{ producto.propietario }}</td>
+          <td>{{ producto.cantidadDisponible }}</td>
         </tr>
       </tbody>
     </table>

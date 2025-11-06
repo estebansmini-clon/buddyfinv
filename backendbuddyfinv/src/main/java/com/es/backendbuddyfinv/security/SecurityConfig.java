@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+//import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,7 +32,7 @@ public class SecurityConfig {
     SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-    @Bean
+     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService());
@@ -52,7 +52,7 @@ public class SecurityConfig {
                     "/swagger-ui.html"
                 ).permitAll()
                 .requestMatchers("/auth/**").permitAll() 
-
+ /**
                 .requestMatchers("/usuarios/**").permitAll()
                 .requestMatchers("/productos/**").permitAll() 
                 .requestMatchers("/ventas/**").authenticated()
@@ -60,13 +60,13 @@ public class SecurityConfig {
                 .requestMatchers("/ingresos/**").authenticated()
               
                 .anyRequest().authenticated()
-          /**   )
+            ) */
 
                 .requestMatchers("/usuarios/**").hasRole("ADMIN")
                 .requestMatchers("/productos/**").authenticated() 
                 .requestMatchers("/ventas/**").hasRole("ADMIN")
                 .requestMatchers("/egresos/**").authenticated()
-                .requestMatchers("/ingresos/**").permitAll()**/
+                .requestMatchers("/ingresos/**").permitAll()
             ).addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class)
 
             .build();
@@ -76,10 +76,10 @@ public class SecurityConfig {
 
 
 // DE MOMENTO NO VAMOS A ENCRIPTAR 
-    @Bean
+ /*   @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
-    }
+    }*/
     
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
