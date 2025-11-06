@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -32,10 +34,11 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/auth/**").permitAll() 
                 .requestMatchers("/usuarios/**").permitAll()
-                .requestMatchers("/productos/**").authenticated() 
+                .requestMatchers("/productos/**").permitAll() 
                 .requestMatchers("/ventas/**").authenticated()
                 .requestMatchers("/egresos/**").authenticated()
                 .requestMatchers("/ingresos/**").authenticated()
+              
                 .anyRequest().authenticated()
             )
             .build();
