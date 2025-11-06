@@ -23,18 +23,21 @@ const router = useRouter()
 
 async function iniciarSesion() {
   try {
-    const res = await fetch('https://tu-api.com/auth/login', {
+    const res = await fetch('http://localhost:8080/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ usuario: usuario.value, clave: clave.value })
+      body: JSON.stringify({
+        username: usuario.value.trim(),
+        password: clave.value.trim()
+      })
     })
 
-    if (!res.ok) throw new Error('Usuario o contraseña incorrectos')
+    if (!res.ok) throw new Error('Credenciales incorrectas')
 
     const { token } = await res.json()
     localStorage.setItem('token', token)
     usuarioStore.establecerDatosDesdeToken(token)
-    router.push('/ventas') // redirige a la vista principal
+    router.push('/ventas')
   } catch (e) {
     error.value = e.message
   }
@@ -43,7 +46,6 @@ async function iniciarSesion() {
 
 
 <style scoped>
-
 .login-container {
   max-width: 400px;
   margin: auto;
@@ -52,27 +54,5 @@ async function iniciarSesion() {
 .error {
   color: red;
   margin-top: 1rem;
-}
-
-
-.login-view {
-  padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.loading {
-  text-align: center;
-  padding: 2rem;
-  color: #ff8800;
-  font-size: 18px;
-}
-
-.error {
-  text-align: center;
-  padding: 2rem;
-  color: #d32f2f;
-  background: #ffebee;
-  border-radius: 8px;
-  font-size: 16px;
 }
 </style>
