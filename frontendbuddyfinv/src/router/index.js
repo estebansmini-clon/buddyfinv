@@ -4,8 +4,11 @@ import DashboardOpciones from '@/views/DashboardOpciones.vue'
 import IngresoTable from '../components/IngresoTable.vue'
 import ProductoView from '../views/ProductoView.vue'
 import VentaView from '../views/VentaView.vue'
+
 //import TestProducto from '../views/TestProducto.vue'
 
+import LoginView from '@/views/LoginView.vue'
+import EgresosTable from '@/components/EgresosTable.vue'
 
 const routes = [
   {
