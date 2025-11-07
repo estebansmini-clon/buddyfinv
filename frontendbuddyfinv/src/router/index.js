@@ -6,6 +6,7 @@ import DashboardLayout from '../layouts/DashboardLayout.vue'
 import VentaView from '../views/VentaView.vue'
 import IngresoTable from '../components/IngresoTable.vue'
 import LoginView from '@/views/LoginView.vue'
+import EgresosTable from '@/components/EgresosTable.vue'
 
 const routes = [
 
@@ -38,6 +39,14 @@ const routes = [
     path: '/listaingresos',
     name: 'Ingresos',
     component: IngresoTable
+  },
+  {
+
+    path: '/listaEgresos',
+    name: 'egresos',
+    component: EgresosTable
+
+
   }
 ]
 

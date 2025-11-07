@@ -12,6 +12,7 @@ import com.es.backendbuddyfinv.repository.EgresoRepository;
 @Service
 public class EgresoService {
 
+
     @Autowired
     private EgresoRepository egresoRepository;
 
@@ -55,4 +56,20 @@ public class EgresoService {
     public boolean existsById(Long id) {
         return egresoRepository.existsById(id);
     }
+
+
+    
+    public List<Egreso> ListarEgresosXusuario(Long idPropietario){
+        return egresoRepository.findByPropietario(idPropietario);
+
+    }
+
+    public double costoTotalEgresosXusuario(Long idPropietario){
+
+        return egresoRepository.sumEgresosByPropietarioId(idPropietario);
+
+
+    }
+
+
 }
