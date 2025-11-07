@@ -55,4 +55,9 @@ public class ProductoService {
     public boolean existsById(Long id) {
         return productoRepository.existsById(id);
     }
+
+    // Obtener productos por ID de usuario (propietario)
+    public List<Producto> getProductosPorUsuario(Long propietarioId) {
+    return productoRepository.findByPropietarioId(propietarioId);
+}
 }
