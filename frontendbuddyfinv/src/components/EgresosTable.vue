@@ -102,11 +102,11 @@ export default {
    
     async cargarEgresos() {
       try {
-        const idUsuario = 2 
+
         
         const [data, total] = await Promise.all([
-          EgresoProvider.getAllEgresosByUsuario(idUsuario),
-          EgresoProvider.costoTotalEgresosById(idUsuario)
+          EgresoProvider.getAllEgresosByUsuario(),
+          EgresoProvider.costoTotalEgresosById()
         ])
         
         this.egresos = Array.isArray(data) ? data : []

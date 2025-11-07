@@ -9,6 +9,7 @@ import VentaView from '../views/VentaView.vue'
 
 import LoginView from '@/views/LoginView.vue'
 import EgresosTable from '@/components/EgresosTable.vue'
+import EgresoView from '@/views/EgresoView.vue'
 
 const routes = [
   {
@@ -30,6 +31,7 @@ const routes = [
         children: [
           { path: 'ventas', name: 'Ventas', component: VentaView },
           { path: 'ingresos', name: 'Ingresos', component: IngresoTable },
+          { path: 'egresos', name: 'Egresos', component: EgresoView }
           // puedes agregar egresos aquí también
         ]
       },
