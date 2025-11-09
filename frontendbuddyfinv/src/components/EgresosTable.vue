@@ -8,7 +8,10 @@
             <div class="table-header-section">
                 <h2 class="title">Lista De Egresos</h2>
                 <button class="btn-consultar" @click="consultarEgreso">
-                    Consultar egreso
+                    Consultar egreso 
+                </button>
+                <button class="btn-Registrar" @click="RegistrarEgreso">
+                    Registrar egreso
                 </button>
             </div>
             
@@ -35,7 +38,7 @@
                 
                 <span class="cell">{{ formatoMoneda(egreso.costo) }}</span>
                 
-                <span class="cell">{{ egreso.descripcionDMetodoDpago  }}</span>
+                <span class="cell">{{ egreso.descripcionMetodoPago  }}</span>
             </div>
             
             <div class="table-footer">
@@ -91,8 +94,12 @@ export default {
       alert('Funcionalidad de consultar egreso - Por implementar')
       console.log('Consultar egreso - Funcionalidad pendiente')
     },
+    RegistrarEgreso() {
+   
+   alert('Funcionalidad de consultar egreso - Por implementar')
+   console.log('Consultar egreso - Funcionalidad pendiente')
+ },
     
-  
     limpiarFiltros() {
 
       this.cargarEgresos()
@@ -199,10 +206,10 @@ export default {
 
 
 .btn-consultar {
-  background-color: #237cdb;
+  background-color: #1380f4;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 20px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
@@ -219,7 +226,20 @@ export default {
 .btn-consultar:active {
   transform: scale(0.98);
 }
+.btn-Registrar{
+  background-color: #237cdb;
+  color: white;
+  border: none;
+  padding: 20px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  letter-spacing: 1px;
 
+}
 
 .table-footer {
   display: flex;
@@ -265,13 +285,13 @@ export default {
 
 .table-header {
   background-color: #237cdb;
-  color: rgb(188, 186, 186);
+  color: rgb(239, 236, 236);
   font-weight: bold;
   border-radius: 5px;
 }
 
 .table-row {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(240, 228, 228);
   border-bottom: 1px solid #ddd;
 }
 
