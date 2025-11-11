@@ -24,7 +24,7 @@ import com.es.backendbuddyfinv.dto.ProductoDTO;
 import com.es.backendbuddyfinv.model.Producto;
 
 
-@CrossOrigin(origins="http://localhost:5173")
+
 //para aceptar las peticiones desde el frontend
 @RestController
 @RequestMapping("/productos")
