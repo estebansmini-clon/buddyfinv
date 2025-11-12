@@ -4,12 +4,13 @@ import DashboardOpciones from '@/views/DashboardOpciones.vue'
 import IngresoTable from '../components/IngresoTable.vue'
 import ProductoView from '../views/ProductoView.vue'
 import VentaView from '../views/VentaView.vue'
+import { useUsuarioStore } from '@/stores/usuarioStore.js'
 
 //import TestProducto from '../views/TestProducto.vue'
 
-import LoginView from '@/views/LoginView.vue'
-import EgresosTable from '@/components/EgresosTable.vue'
+
 import EgresoView from '@/views/EgresoView.vue'
+
 
 const routes = [
   {
@@ -25,6 +26,7 @@ const routes = [
     path: '/dashboard',
     component: DashboardLayout,
     redirect: '/dashboard/dashboard',
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'dashboard',
@@ -43,5 +45,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const usuarioStore = useUsuarioStore()
+  const requiereAuth = to.matched.some(record => record.meta.requiereAuth)
+
+  if (requiereAuth && !usuarioStore.token) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+
 
 export default router

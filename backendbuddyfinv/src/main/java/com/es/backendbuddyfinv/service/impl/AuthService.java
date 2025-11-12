@@ -97,4 +97,9 @@ public class AuthService {
             throw new BadCredentialsException("Contraseña invalida. Por favor verifique e intente de nuevo");
         }
     }
+
+    public void revocarToken(String token) {
+        System.out.println("Revocando token: " + token);
+    }
+
 }
