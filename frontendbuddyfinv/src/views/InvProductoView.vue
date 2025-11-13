@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ProductoTable from "@/components/ProductoTable.vue";
+import ProductoTable from "@/components/InvProductoTable.vue";
 
 export default {
   name: "ProductoView",

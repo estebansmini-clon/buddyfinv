@@ -9,12 +9,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.es.backendbuddyfinv.repository.InventarioRepository;
 import com.es.backendbuddyfinv.service.impl.ProductoService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import java.util.stream.Collectors;
 import com.es.backendbuddyfinv.dto.ProductoDTO;
 import com.es.backendbuddyfinv.model.Producto;
+//import com.es.backendbuddyfinv.model.TipoProducto;
+//import com.es.backendbuddyfinv.repository.TipoProductoRepository;
+//import com.es.backendbuddyfinv.repository.EstadoProductoRepository;
+//import com.es.backendbuddyfinv.model.EstadoProducto;
+import jakarta.persistence.EntityNotFoundException;
+
+
 import java.util.List;
+import com.es.backendbuddyfinv.dto.ProductoCrearDTO;
 
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import org.springframework.security.core.Authentication;
@@ -39,9 +48,10 @@ public class ProductoController {
 
      @Autowired
     private ProductoService productoService ;
+
     
     @Autowired
-    private InventarioRepository inventarioRepository;
+    private InventarioRepository inventarioRepository; //creo que aqui no debe ir este repository pero por ahora lo dejare ahi para no romper nada
 
     //metodo para obtener todos los productos
     @GetMapping("/all")
@@ -68,8 +78,8 @@ public class ProductoController {
     public String test() {
         return "Controlador de productos funcionando correctamente!";
     }
-
-    @GetMapping("/por-usuario/{id}")
+    //se supone que este metodo no debe ir aqui, lo pondr ene comentarios mientras tanto
+   /*  @GetMapping("/por-usuario/{id}") 
     public ResponseEntity<List<ProductoDTO>> obtenerProductosPorUsuario(@PathVariable Long id) {
         List<Producto> productos = productoService.getProductosPorUsuario(id);
         List<ProductoDTO> productosDTO = productos.stream()
@@ -80,18 +90,22 @@ public class ProductoController {
             })
             .collect(Collectors.toList());
         return ResponseEntity.ok(productosDTO);
-    }
+    }*/
 
+    //funcion para agregar productos
     @PostMapping("/agregar")
-    public ResponseEntity<String> agregarProducto(@RequestBody Producto producto) {
-    try {
-        productoService.createProducto(producto);
-        return ResponseEntity.ok("Producto agregado correctamente");
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.status(500).body("Error al agregar producto");
+    public ResponseEntity<?> crearProducto(@RequestBody ProductoCrearDTO dto) {
+        try {
+            Producto nuevo = productoService.createProducto(dto);
+            return ResponseEntity.ok(nuevo);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                 .body("Tipo de producto no encontrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body("Error al guardar el producto");
+        }
     }
-}
 
     /** 
     @GetMapping("/mine")
