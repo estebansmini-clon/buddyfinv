@@ -19,6 +19,11 @@ const routes = [
     redirect: '/login'
   },
   {
+    path: '/registro',
+    name: 'Registro',
+    component: () => import('../views/RegistroView.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/LoginView.vue')
