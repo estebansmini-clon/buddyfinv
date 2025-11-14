@@ -21,6 +21,8 @@ public class EstadoProducto {
     @Column(name = "observacion")
     private String observacion;
 
+    
+
     // Constructor por defecto
     public EstadoProducto() {
     }

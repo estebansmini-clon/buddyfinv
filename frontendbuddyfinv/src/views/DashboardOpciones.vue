@@ -1,31 +1,33 @@
 <template>
   <div class="dashboard-container">
+    <!-- Dashboard Content -->
     <div class="dashboard-content">
-      <h1 class="dashboard-title">Dashboard Administrador</h1>
+      <h1 class="dashboard-title">DASHBOARD</h1>
       <p class="dashboard-subtitle">
         BIENVENIDO DE NUEVO. AQUÍ TIENES UN RESUMEN DE LA ACTIVIDAD DE TU NEGOCIO.
       </p>
 
+      <!-- Cards -->
       <div class="cards-container">
-        <div class="card card--ingresos" @click="irAIngresos">
+        <div class="card ingresos-card" @click="irAIngresos">
           <div class="card-button">
-            <span class="card-title">Ingresos</span>
+            <span class="card-title">INGRESOS</span>
           </div>
-          <p class="card-description">Mira el registro de tus ingresos</p>
+          <p class="card-description">MIRA EL REGISTRO DE TUS INGRESOS</p>
         </div>
 
-        <div class="card card--egresos" @click="irAEgresos">
+        <div class="card egresos-card" @click="irAEgresos">
           <div class="card-button">
-            <span class="card-title">Egresos</span>
+            <span class="card-title">EGRESOS</span>
           </div>
-          <p class="card-description">Mira el registro de tus egresos</p>
+          <p class="card-description">MIRA EL REGISTRO DE TUS EGRESOS</p>
         </div>
 
-        <div class="card card--ventas" @click="irAVentas">
+        <div class="card ventas-card" @click="irAVentas">
           <div class="card-button">
-            <span class="card-title">Ventas</span>
+            <span class="card-title">VENTAS</span>
           </div>
-          <p class="card-description">Mira el registro de tus ventas</p>
+          <p class="card-description">MIRA EL REGISTRO DE TUS VENTAS</p>
         </div>
       </div>
     </div>
@@ -54,8 +56,12 @@ const irAEgresos = () => {
 .dashboard-container {
   width: 100%;
   min-height: 100vh;
-  background-color: #fff;
-  font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 0;
 }
 
 .dashboard-content {
@@ -69,6 +75,7 @@ const irAEgresos = () => {
   font-weight: bold;
   color: #333;
   margin-bottom: 0.5rem;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .dashboard-subtitle {
@@ -79,21 +86,20 @@ const irAEgresos = () => {
 }
 
 .cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .card {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  padding: 2rem;
-  border-radius: 16px;
+  gap: 3rem;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  font-family: 'Segoe UI', sans-serif;
 }
 
 .card:hover {
@@ -101,37 +107,52 @@ const irAEgresos = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.ventas-card {
+  background-color: #e3f2fd;
+}
+
+.ingresos-card {
+  background-color: #e8f5e9;
+}
+
+.egresos-card {
+  background-color: #ffebee;
+  
+}
+
 .card-button {
-  font-size: 1.2rem;
-  text-align: center;
-  padding: 0.75rem;
+  padding: 2.25rem 3.5rem;
   border-radius: 8px;
-  margin-bottom: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
-  color: #333;
+  min-width: 240px;
+  text-align: center;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.ventas-card .card-button {
+  background-color: #90caf9;
+}
+
+.ingresos-card .card-button {
+  background-color: #a5d6a7;
+}
+
+.egresos-card .card-button {
+  background-color: #ef9a9a;
 }
 
 .card-title {
+  font-size: 1.2rem;
   font-weight: bold;
+  color: #333;
+  text-decoration: underline;
+  display: block;
 }
 
 .card-description {
-  font-size: 0.95rem;
-  color: #333;
-  text-align: center;
-}
-
-/* Colores pastel por acción */
-.card--ingresos {
-  background-color: #d6f0f5;
-}
-
-.card--egresos {
-  background-color: #fff6da;
-}
-
-.card--ventas {
-  background-color: #fbe4f0;
+  font-size: 1.1rem;
+  color: #555;
+  margin: 0;
+  flex: 1;
+  text-align: left;
 }
 </style>

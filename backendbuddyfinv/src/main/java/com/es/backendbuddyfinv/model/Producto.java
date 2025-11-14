@@ -1,7 +1,14 @@
 package com.es.backendbuddyfinv.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import java.util.List;
 
@@ -30,13 +37,12 @@ public class Producto {
     @JoinColumn(name = "id_estado_producto", nullable = false)
     private EstadoProducto estadoProducto;
 
-    @OneToOne(mappedBy = "producto")
-    @JsonIgnore // Evita bucle con Inventario → Producto → Inventario...
-    private Inventario inventario;
+    @OneToMany(mappedBy = "producto")
+    private List<DetalleInventario> detalleInventarios;
 
+    //propietario del negocio
     @ManyToOne
     @JoinColumn(name = "id_propietario")
-    @JsonIgnore // Opcional: oculta el propietario si no lo necesitás en el frontend
     private Usuario propietario;
 
     // Constructor por defecto
@@ -48,4 +54,5 @@ public class Producto {
         this.nombre = nombre;
         this.precio = precio;
     }
+
 }
