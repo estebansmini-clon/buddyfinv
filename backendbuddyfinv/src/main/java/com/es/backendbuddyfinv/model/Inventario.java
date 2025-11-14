@@ -22,6 +22,8 @@ public class Inventario {
     @Column(name = "id_inventario")
     private Long idInventario;
 
+    
+
     @OneToMany(mappedBy = "inventario")
     private List<DetalleInventario> detalleInventarios;
 

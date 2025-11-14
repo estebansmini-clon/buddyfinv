@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.es.backendbuddyfinv.dto.ProductoCrearDTO;
+import com.es.backendbuddyfinv.dto.ProductoDTO;
 import com.es.backendbuddyfinv.model.Producto;
 import com.es.backendbuddyfinv.model.Inventario;
 import com.es.backendbuddyfinv.model.DetalleInventario;
@@ -129,12 +130,16 @@ public class ProductoService {
                     Usuario propietario = usuarioRepository.findById(propietarioId)
                             .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
                     inventario.setPropietario(propietario);
+                    // Asegurar que cantidadDisponible tenga un valor por defecto (0)
+                    
                     inventario = inventarioRepository.save(inventario);
                     logger.debug("Creado nuevo inventario con ID: {}", inventario.getIdInventario());
                 }
             } else {
                 // Si no hay propietario, crear un inventario sin propietario
                 inventario = new Inventario();
+                // Asegurar que cantidadDisponible tenga un valor por defecto (0)
+                
                 inventario = inventarioRepository.save(inventario);
                 logger.debug("Creado nuevo inventario sin propietario con ID: {}", inventario.getIdInventario());
             }
@@ -162,7 +167,9 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    /* Obtener un producto por ID
+    
+/** 
+     Obtener un producto por ID
     public Optional<Producto> getProductoById(Long id) {
         return productoRepository.findById(id);
     }
@@ -187,16 +194,22 @@ public class ProductoService {
         }
         return false;
     }
-
+    */
     // Verificar si existe un producto
     public boolean existsById(Long id) {
         return productoRepository.existsById(id);
     }
 
     // Obtener productos por ID de usuario (propietario)
-    public List<Producto> getProductosPorUsuario(Long propietarioId) {
-    return productoRepository.findByPropietarioId(propietarioId);
+public List<ProductoDTO> getProductosPorUsuario(Long idPropietario) {
+    List<Producto> productos = productoRepository.findByPropietarioConInventario(idPropietario);
+
+    return productos.stream()
+        .flatMap(producto -> producto.getDetalleInventarios().stream()
+            .map(detalle -> new ProductoDTO(producto, detalle.getCantidadDisponible()))
+        )
+        .toList();
 }
 
-*/
+
 }
