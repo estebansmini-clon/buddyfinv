@@ -1,7 +1,9 @@
 package com.es.backendbuddyfinv.security;
 
-import java.io.IOException;
-
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -10,10 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.es.backendbuddyfinv.service.impl.CustomUserDetailsService;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -35,8 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            // No hay token, continuar sin autenticación
-            // Spring Security decidirá si permite o rechaza la petición
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,9 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         if (!jwtUtil.isTokenValid(token)) {
-            // Token inválido o expirado, continuar sin autenticación
-            // Spring Security decidirá si permite o rechaza la petición
-            System.out.println("⚠️ Token JWT inválido o expirado para: " + request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }

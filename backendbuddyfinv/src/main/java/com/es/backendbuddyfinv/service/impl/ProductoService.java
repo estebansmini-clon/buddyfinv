@@ -25,10 +25,11 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
-    // Obtener un producto por ID
-    public Optional<Producto> getProductoById(Long id) {
-        return productoRepository.findById(id);
+    // Obtener productos por usuario (propietario)
+    public List<Producto> getProductosPorUsuario(Long idUsuario) {
+        return productoRepository.findByPropietarioId(idUsuario);
     }
+
 
     // Actualizar un producto
     public Producto updateProducto(Long id, Producto productoDetails) {
@@ -51,13 +52,23 @@ public class ProductoService {
         return false;
     }
 
-    // Verificar si existe un producto
-    public boolean existsById(Long id) {
-        return productoRepository.existsById(id);
-    }
-
-    // Obtener productos por ID de usuario (propietario)
-    public List<Producto> getProductosPorUsuario(Long propietarioId) {
-    return productoRepository.findByPropietarioId(propietarioId);
+// Verificar si existe un producto
+public boolean existsById(Long id) {
+    return productoRepository.existsById(id);
 }
+
+// Obtener producto editable según rol del usuario
+public Optional<Producto> getProductoEditablePorCodigo(Long idProducto, Long idUsuario, String rol, Long idAdministrador) {
+    if ("ADMIN".equalsIgnoreCase(rol)) {
+        return getProductoSiEsDelPropietario(idProducto, idUsuario);
+    } else {
+        return Optional.empty();
+    }
+}
+
+// Obtener producto si pertenece directamente al propietario
+public Optional<Producto> getProductoSiEsDelPropietario(Long idProducto, Long idPropietario) {
+    return productoRepository.findByIdAndPropietario(idProducto, idPropietario);
+}
+
 }
