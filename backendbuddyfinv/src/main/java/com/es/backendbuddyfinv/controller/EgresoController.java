@@ -112,6 +112,11 @@ public class EgresoController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("No está autenticado. Por favor, inicie sesión nuevamente.");
             }
+                String obs = requestDTO.getObservacion();
+            if (obs == null || obs.length() > 300 || !obs.matches("^[a-zA-Z0-9\\s.,áéíóúÁÉÍÓÚñÑ-]*$")) {
+                throw new IllegalArgumentException("Observación inválida: debe ser alfanumérica y máximo 300 caracteres");
+                }
+
             
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             Long idPropietario = userDetails.getIdUsuario();
