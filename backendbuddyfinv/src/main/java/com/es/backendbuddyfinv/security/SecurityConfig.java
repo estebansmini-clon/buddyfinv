@@ -45,28 +45,32 @@ public class SecurityConfig {
   }
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html"
-                ).permitAll()
-                .requestMatchers("/auth/**").permitAll() 
-
-                .requestMatchers("/usuarios/**").hasRole("ADMIN")
-                .requestMatchers("/productos/**").authenticated() 
-                .requestMatchers("/ventas/**").hasRole("ADMIN")
-                .requestMatchers("/Egresos/**").authenticated()
-                .requestMatchers("/ingresos/**").permitAll()
-            ).addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class)
-
-            .build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+      return http
+          .csrf(csrf -> csrf.disable())
+          .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+          .authorizeHttpRequests(auth -> auth
+              .requestMatchers(
+                  "/swagger-ui/**",
+                  "/v3/api-docs/**",
+                  "/swagger-ui.html"
+              ).permitAll()
+              .requestMatchers("/auth/**").permitAll()
+  
+              .requestMatchers("/usuarios/**").hasRole("ADMIN")
+              .requestMatchers("/productos/**").authenticated()
+              .requestMatchers("/ventas/**").hasRole("ADMIN")
+              .requestMatchers("/Egresos/**").authenticated()
+              .requestMatchers("/ingresos/**").permitAll()
+              .requestMatchers("/tipo-producto/**").hasRole("ADMIN")
+              .requestMatchers("/estado-producto/**").authenticated()
+          )
+          .authenticationProvider(daoAuthenticationProvider())
+          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+          .build();
+  }
+  
 
 
 

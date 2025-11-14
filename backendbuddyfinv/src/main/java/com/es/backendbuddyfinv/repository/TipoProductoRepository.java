@@ -1,10 +1,13 @@
 package com.es.backendbuddyfinv.repository;
-import com.es.backendbuddyfinv.model.TipoProducto;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.stereotype.Repository;
+import com.es.backendbuddyfinv.model.TipoProducto;
+import java.util.List;
 
 @Repository
 public interface TipoProductoRepository extends JpaRepository<TipoProducto, Long> {
-    TipoProducto findByObservacion(String observacion);
-}
+    List<TipoProducto> findByPropietarioId(Long idPropietario);
 
+}
