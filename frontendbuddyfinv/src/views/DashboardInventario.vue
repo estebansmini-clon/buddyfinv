@@ -38,7 +38,7 @@
   const router = useRouter()
   
   const irAInventario = () => router.push({ name: 'VerInventario' })
-  const irAAñadirProducto = () => router.push({ name: 'AñadirProducto' })
+  const irAAñadirProducto = () => router.push({ name: 'AgregarProducto' }) //lo cambie porque mi modelo se llama asi
   const irAModificarProducto = () => router.push({ name: 'ModificarProducto' })
   const irAReabastecerProducto = () => router.push({ name: 'ReabastecerProducto' })
   </script>
