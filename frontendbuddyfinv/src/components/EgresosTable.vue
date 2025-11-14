@@ -54,19 +54,41 @@
           <input v-model="nuevoEgreso.fecha" type="date" class="form-input" />
         </div>
 
+
+        <!-- Campo Concepto: descripción del egreso (ej: Compra de materiales) -->
         <div class="form-group">
-          <label>Concepto:</label>
-          <input v-model="nuevoEgreso.observacion" type="text" class="form-input" />
+          <label>observaciones:</label>
+          <input 
+            v-model="nuevoEgreso.observacion" 
+            type="text" 
+            maxlength="300"
+            placeholder="Ej: Compra de materiales"
+            class="form-input"
+          />
         </div>
 
         <div class="form-group">
           <label>Categoría:</label>
-          <input v-model="nuevoEgreso.categoria" type="text" class="form-input" />
+          <select v-model="nuevoEgreso.categoria" class="form-select">
+            <option value="">Seleccione una categoría...</option>
+      <option v-for="tipo in tiposEgreso" :key="tipo.idTipoEgreso" :value="tipo.descripcion">
+          {{ tipo.descripcion }}
+      </option>
+
+
+          </select>
         </div>
 
         <div class="form-group">
           <label>Valor:</label>
-          <input v-model.number="nuevoEgreso.costo" type="number" class="form-input" />
+          <input 
+            v-model.number="nuevoEgreso.costo" 
+            type="number" 
+            step="0.01"
+            min="0" 
+            placeholder="Ej: 25000"
+            class="form-input"
+          />
         </div>
 
         <div class="form-group">
@@ -94,10 +116,11 @@ export default {
   name: 'EgresoTable',
   data() {
     return {
-      egresos: [],
-      totalEgresos: 0,
-      mostrarModal: false,
-      fechaInicio: '',
+      tiposEgreso:[],
+      egresos: [], // Lista de egresos obtenidos del backend
+      totalEgresos: 0, // Suma total de todos los egresos
+      mostrarModal: false, // Controla la visibilidad del modal de registro el false es porque mientras no se unda el boton no se abra el formulario
+       fechaInicio: '', // ← esta línea es clave
       fechaFin: '',
       nuevoEgreso: {
         fecha: '',
@@ -121,6 +144,20 @@ export default {
     }
   },
   methods: {
+    async cargarTiposEgreso() {
+    try {
+      const response = await fetch('http://localhost:8080/tipo-egresos');
+      const data = await response.json();
+      this.tiposEgreso = data;
+    } catch (error) {
+      console.error('Error al cargar tipos de egreso:', error);
+    }
+  },mounted() {
+  this.cargarTiposEgreso();
+},
+
+
+   
     formatoMoneda(valor) {
       if (!valor && valor !== 0) return '0.00'
       return new Intl.NumberFormat('es-CO', {
@@ -230,6 +267,7 @@ export default {
   },
   async mounted() {
     await this.cargarEgresos()
+    await this.cargarTiposEgreso()
   }
 }
 </script>

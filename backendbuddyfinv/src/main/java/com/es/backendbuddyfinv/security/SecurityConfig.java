@@ -65,6 +65,7 @@ public class SecurityConfig {
               .requestMatchers("/ingresos/**").permitAll()
               .requestMatchers("/tipo-producto/**").hasRole("ADMIN")
               .requestMatchers("/estado-producto/**").authenticated()
+              .requestMatchers("/tipo-egresos/**").permitAll()
           )
           .authenticationProvider(daoAuthenticationProvider())
           .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
