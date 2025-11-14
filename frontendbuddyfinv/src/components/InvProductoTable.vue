@@ -16,7 +16,7 @@
 
       <tbody>
         <tr v-for="producto in productosOrdenados" :key="producto.id">
-          <td>{{ producto.id }}</td>
+          <td>{{ producto.id}}</td>
           <td>{{ producto.nombre }}</td>
           <td>{{ producto.precio }}</td>
           <td>{{ producto.tipoProducto }}</td>
