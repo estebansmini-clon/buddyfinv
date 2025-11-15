@@ -24,5 +24,25 @@ export const UsuarioProvider = {
     })
     const data = await handleResponse(res)
     return Array.isArray(data) ? data.map(u => new UsuarioDTO(u)) : []
+  },
+
+  async registrar(datos) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+  
+      const data = await res.json();
+      return {
+        success: data.success ?? false,
+        message: data.message ?? 'Error desconocido'
+      };
+  
+    } catch (error) {
+      return { success: false, message: 'Error de conexión con el servidor' };
+    }
   }
+  
 }

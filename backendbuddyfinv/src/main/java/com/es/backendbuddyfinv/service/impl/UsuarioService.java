@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
+import com.es.backendbuddyfinv.model.Rol;
 import com.es.backendbuddyfinv.model.Usuario;
-
+import com.es.backendbuddyfinv.repository.RolRepository;
 import com.es.backendbuddyfinv.repository.UsuarioRepository;
 
 @Service
@@ -17,6 +17,8 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private RolRepository rolRepository;
 
     public Usuario findByUsuario(String username) {
         return usuarioRepository.findByUsuario(username)
@@ -68,6 +70,31 @@ public class UsuarioService {
     public boolean existsByUsuarioOrEmail(String usuario, String email) {
         return usuarioRepository.existsByUsuarioOrEmail(usuario, email);
     }
+
+     //verificar que exista el nombre de usuario
+    public boolean existsByUsuario(String usuario){
+        return usuarioRepository.existsByUsuario(usuario);
+    }
+    //verificar que exista el email
+    public boolean existsByEmail(String email){
+        return usuarioRepository.existsByEmail(email);
+    }
+    //verificar que exista el nit usuario
+    public boolean existsByNitUsuario(String nitUsuario){
+        return usuarioRepository.findAll().stream().anyMatch(u -> u.getNitUsuario().equals(nitUsuario));
+    }
+    public boolean existsByNombre(String nombre){
+        return usuarioRepository.existsByNombre(nombre);
+    }
+    public boolean existsByNegocio(String negocio){
+        return usuarioRepository.existsByNegocio(negocio);
+    }
+    
+    public Rol obtenerRolPorDefecto(){
+        return rolRepository.findByDescripcion("ADMIN")
+        .orElseThrow(() -> new RuntimeException("Rol por defecto o admin no encontrado"));
+    }
+
     
 
 }

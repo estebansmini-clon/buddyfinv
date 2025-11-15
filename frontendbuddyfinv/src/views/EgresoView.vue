@@ -20,4 +20,4 @@
   .egresos-view {
     padding: 20px;
   }
-  </style>
+  </style> 
