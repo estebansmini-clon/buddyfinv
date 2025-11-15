@@ -9,18 +9,8 @@ function getAuthHeader() {
 async function handleResponse(response) {
   if (!response.ok) {
     const text = await response.text().catch(() => '')
-    // Intentar parsear como JSON si es posible
-    let message = text
-    try {
-      const json = JSON.parse(text)
-      message = json.message || json.error || text
-    } catch (e) {
-      // Si no es JSON, usar el texto o el status
-      message = text || `${response.status} ${response.statusText}`
-    }
-    const error = new Error(message)
-    error.status = response.status
-    throw error
+    const message = text || `${response.status} ${response.statusText}`
+    throw new Error(message)
   }
   const contentType = response.headers.get('content-type') || ''
   if (contentType.includes('application/json')) {
@@ -51,23 +41,14 @@ export const EgresoProvider = {
   },
 
   async registerEgreso(data) {
-    const token = localStorage.getItem('token')
-    console.log('🔑 Token disponible:', token ? 'Sí' : 'No')
-    console.log('📦 Datos a enviar:', data)
-    
-    const headers = {
-      'Content-Type': 'application/json',
-      ...getAuthHeader(),
-    }
-    console.log('📤 Headers:', headers)
-    
     const res = await fetch(`${EGRESO_BASE}/agregarEgreso`, {
       method: 'POST',
-      headers: headers,
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader(),
+      },
       body: JSON.stringify(data)
     })
-    
-    console.log('📥 Respuesta status:', res.status, res.statusText)
     return handleResponse(res)
   },
 
@@ -127,28 +108,7 @@ export const EgresoProvider = {
       }
     })
     return handleResponse(res)
-
-  }, async filtrarByFechas(fechaInicio, fechaFin) {
-    const res = await fetch(`${EGRESO_BASE}/filtrarFechas?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getAuthHeader()
-      }
-    })
-    return handleResponse(res)
   }
-  
-  
-
-
-
-
-
-  
-  
-
-  
 }
 
 export default EgresoProvider

@@ -21,11 +21,6 @@ const routes = [
     redirect: '/login'
   },
   {
-    path: '/registro',
-    name: 'Registro',
-    component: () => import('../views/RegistroView.vue')
-  },
-  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/LoginView.vue')
@@ -43,14 +38,14 @@ const routes = [
      
       { path: 'ventas', name: 'Ventas', component: VentaView },
       { path: 'ingresos', name: 'Ingresos', component: IngresoTable },
-      { path: 'egresos', name: 'Egresos', component: EgresoView }
-      /**{ path: 'inventario', name: 'inventario', component: ProductoView ,
+      { path: 'egresos', name: 'Egresos', component: EgresoView },
+      { path: 'inventario', name: 'inventario', component: ProductoView ,
         children: [
           {path: 'agregarproducto', name: 'AgregarProducto', component: AgregarProductoView},
           {path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView},
           {path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView}
         ] 
-      }**/
+      }
     ]
 
   },  {
@@ -74,7 +69,6 @@ const routes = [
 
 ]
   
-
 
 
 const router = createRouter({
