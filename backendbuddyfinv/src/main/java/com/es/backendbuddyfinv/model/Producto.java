@@ -7,9 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import java.util.List;
 
 @Entity
 @Table(name = "productos")
@@ -36,9 +37,8 @@ public class Producto {
     @JoinColumn(name = "id_estado_producto", nullable = false)
     private EstadoProducto estadoProducto;
 
-    @OneToOne(mappedBy = "producto")
-    private Inventario inventario;
-    
+    @OneToMany(mappedBy = "producto")
+    private List<DetalleInventario> detalleInventarios;
 
     //propietario del negocio
     @ManyToOne

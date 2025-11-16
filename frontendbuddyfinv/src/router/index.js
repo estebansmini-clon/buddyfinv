@@ -2,14 +2,18 @@ import { createRouter, createWebHistory } from 'vue-router'
 import DashboardLayout from '../layouts/DashboardLayout.vue'
 import DashboardOpciones from '@/views/DashboardOpciones.vue'
 import IngresoTable from '../components/IngresoTable.vue'
-import ProductoView from '../views/ProductoView.vue'
+import ProductoView from '../views/InvProductoView.vue'
 import VentaView from '../views/VentaView.vue'
-
+import AgregarProductoView from '../views/AgregarProductoView.vue'
+import ModificarProductoView from '../views/ModificarProductoView.vue'
+import ReabastecerProductoView from '../views/ReabastecerProductoView.vue'
 //import TestProducto from '../views/TestProducto.vue'
 
 import LoginView from '@/views/LoginView.vue'
 import EgresosTable from '@/components/EgresosTable.vue'
 import EgresoView from '@/views/EgresoView.vue'
+import InvProductoView from '../views/InvProductoView.vue'
+import DashboardInventario from '../views/DashboardInventario.vue'
 
 const routes = [
   {
@@ -17,32 +21,98 @@ const routes = [
     redirect: '/login'
   },
   {
+    path: '/registro',
+    name: 'Registro',
+    component: () => import('../views/RegistroView.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/LoginView.vue')
   },
-  {
-    path: '/dashboard',
-    component: DashboardLayout,
-    children: [
-      {
-        path: 'dashboard',
-        component: DashboardOpciones,
-        children: [
-          { path: 'ventas', name: 'Ventas', component: VentaView },
-          { path: 'ingresos', name: 'Ingresos', component: IngresoTable },
-          { path: 'egresos', name: 'Egresos', component: EgresoView }
-          // puedes agregar egresos aquí también
-        ]
-      },
-      { path: 'inventario', name: 'inventario', component: ProductoView }
-    ]
-  }
+    {
+  path: '/dashboard',
+  component: DashboardLayout,
+  redirect: '/dashboard/dashboard',
+  meta: { requiresAuth: true }, // ← aquí
+  children: [
+    { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
+    { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
+    { path: 'ingresos', name: 'Ingresos', component: IngresoTable, meta: { requiresAuth: true } },
+    { path: 'egresos', name: 'Egresos', component: EgresoView, meta: { requiresAuth: true } },
+    {
+      path: 'inventario',
+      name: 'inventario',
+      component: ProductoView,
+      meta: { requiresAuth: true },
+      children: [
+        { path: 'agregarproducto', name: 'AgregarProducto', component: AgregarProductoView, meta: { requiresAuth: true } },
+        { path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView, meta: { requiresAuth: true } },
+        { path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView, meta: { requiresAuth: true } }
+      ]
+    }
+  ]
+}
+,  {
+  path: '/dashboardInv',
+  component: DashboardLayout,
+  redirect: '/dashboardInv/dashboardInv',
+  meta: { requiresAuth: true },
+  children: [
+    {
+      path: 'dashboardInv',
+      name: 'dashboardInv',
+      component: DashboardInventario,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'verinventario',
+      name: 'VerInventario',
+      component: InvProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'añadirProducto',
+      name: 'AñadirProducto',
+      component: AgregarProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'modificarproducto',
+      name: 'ModificarProducto',
+      component: ModificarProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'reabastecerproducto',
+      name: 'ReabastecerProducto',
+      component: ReabastecerProductoView,
+      meta: { requiresAuth: true }
+    }
+  ]
+}
+
+  
+
 ]
+  
+
+
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+
+  if (to.meta.requiresAuth && !token) {
+    next('/login') // redirige si no hay token
+  } else {
+    next() // permite navegación
+  }
 })
 
 export default router
