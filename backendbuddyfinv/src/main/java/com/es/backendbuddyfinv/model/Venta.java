@@ -26,6 +26,10 @@ public class Venta {
     @Column(name = "id_venta")
     private Long idVenta;
 
+    @Column(name = "cliente", nullable = true)
+    private String cliente;
+
+
     @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha;
 
