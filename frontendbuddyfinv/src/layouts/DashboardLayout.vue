@@ -297,11 +297,16 @@ nav button:hover {
 
 .btn-confirm {
   background: #ffbc21;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  font-weight: bold;
   border: none;
   padding: 0.5rem 1rem;
+  text-align: center;
   border-radius: 6px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn-confirm:hover {
   background: #ffbc21;
@@ -309,11 +314,16 @@ nav button:hover {
 
 .btn-cancel {
   background: #6c757d;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  text-align: center;
   border: none;
+  font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn-cancel:hover {
   background: #5a6268;
@@ -321,9 +331,10 @@ nav button:hover {
 
 /* Mensaje de éxito */
 .success-message {
-  position: fixed;
+
   bottom: 20px;
-  right: 20px;
+  text-align: center;
+
   background: #a7a328;
   color: rgb(0, 0, 0);
   padding: 0.8rem 1.2rem;
