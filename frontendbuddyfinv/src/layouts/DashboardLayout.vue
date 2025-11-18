@@ -161,7 +161,9 @@ export default {
 <style scoped>
 .layout {
   display: flex;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+
   font-family: 'Segoe UI', sans-serif;
   background-color: #fdf6ec;
 }
@@ -239,9 +241,9 @@ nav button:hover {
 
 .contenido {
   flex: 1;
-  padding: 0;
+  overflow-y: auto;
   background-color: #ffffff;
-  min-height: 100vh;
+
 }
 
 .top-bar {
