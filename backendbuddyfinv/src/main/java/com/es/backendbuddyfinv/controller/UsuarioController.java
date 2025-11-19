@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.es.backendbuddyfinv.dto.UsuarioCrearDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
 import com.es.backendbuddyfinv.model.Usuario;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
+import com.es.backendbuddyfinv.security.JwtUtil;
 import com.es.backendbuddyfinv.service.impl.UsuarioService;
 
 @RestController
@@ -35,6 +38,15 @@ public class UsuarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    //extraer id admin
+    private Long obtenerAdministradorDesdeToken(String authHeader){
+        String token = authHeader.replace("Bearer", "");
+        return jwtUtil.getIdAdministrador(token);
+    }
 
     // Registro de usuario
     @PostMapping("/registrar")
@@ -91,6 +103,17 @@ public class UsuarioController {
         Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
         return usuario.map(ResponseEntity::ok)
                       .orElse(ResponseEntity.notFound().build());
+    }
+
+
+    // Crear empleados (Admin)
+    @PostMapping("/agregar")
+    public ResponseEntity<?> crearEmpleado(@RequestBody UsuarioCrearDTO dto, @RequestHeader("Authorization") String authHeader){
+        long idAdmin= obtenerAdministradorDesdeToken(authHeader);
+
+        Usuario nuevoEmpleado = usuarioService.crearEmpleado(idAdmin, dto);
+
+        return ResponseEntity.ok(nuevoEmpleado);
     }
 
     // Actualizar usuario

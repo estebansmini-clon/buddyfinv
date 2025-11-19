@@ -7,6 +7,8 @@ import VentaView from '../views/VentaView.vue'
 import AgregarProductoView from '../views/AgregarProductoView.vue'
 import ModificarProductoView from '../views/ModificarProductoView.vue'
 import ReabastecerProductoView from '../views/ReabastecerProductoView.vue'
+import AgregarEmpleadoView from '@/views/AgregarEmpleadoView.vue'
+import ListaEmpleadosView from '@/views/ListaEmpleadosView.vue'
 //import TestProducto from '../views/TestProducto.vue'
 
 import LoginView from '@/views/LoginView.vue'
@@ -107,6 +109,18 @@ const routes = [
       path: 'configuracion',
       name: 'dashboardConfiguracion',
       component: DashBoardConfiguracionView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'empleados',
+      name: 'ListaEmpleados',
+      component: ListaEmpleadosView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'empleados/agregar',
+      name: 'AgregarEmpleado',
+      component: AgregarEmpleadoView,
       meta: { requiresAuth: true }
     },
     {
