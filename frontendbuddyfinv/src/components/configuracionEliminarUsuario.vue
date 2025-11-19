@@ -2,6 +2,7 @@
   <div class="user-table-container">
     <h2 class="title">Lista de Usuarios</h2>
 
+    <div class="venta-scroll">
     <div class="table-header">
       <span>ID</span>
       <span>Numero de documento</span>
@@ -40,6 +41,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -183,6 +185,8 @@ export default {
   border-radius: 8px;
   width: 400px;
   text-align: center;
+  font-size: 19px ;
+  
 }
 
 .modal-buttons {
@@ -205,6 +209,28 @@ export default {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
+}
+.venta-scroll {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-color: #f8c471 transparent;
+  scrollbar-width: thin;
+}
+
+.venta-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.venta-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.venta-scroll::-webkit-scrollbar-thumb {
+  background-color: #f8c471;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
   </style>
