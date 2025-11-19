@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.es.backendbuddyfinv.dto.UsuarioDTO;
+import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
 import com.es.backendbuddyfinv.model.Usuario;
+import com.es.backendbuddyfinv.security.CustomUserDetails;
 import com.es.backendbuddyfinv.service.impl.UsuarioService;
 
 @RestController
@@ -123,20 +126,49 @@ public class UsuarioController {
 
     // Eliminar usuario
     @DeleteMapping("/eliminar")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable Long idUsuario) {
+    public ResponseEntity<?> eliminarUsuario(@RequestParam Long idUsuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
         try {
             boolean eliminado = usuarioService.deleteUsuario(idUsuario);
             if (eliminado) {
-                return ResponseEntity.ok().body("Usuario eliminado exitosamente");
+                return ResponseEntity.ok("Usuario eliminado exitosamente");
             }
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al eliminar usuario: " + e.getMessage());
         }
     }
+
+
+    //no borrar funcion de juan david
+
+    @GetMapping("/allUsersByPropietario")
+    public ResponseEntity<List<UsuarioDTOfind>> obtenerEgresosDetallados() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long idPropietario = userDetails.getIdUsuario();
+
+        List<UsuarioDTOfind> usuarios = usuarioService.listarDTOsPorUsuario(idPropietario);
+        return ResponseEntity.ok(usuarios);
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

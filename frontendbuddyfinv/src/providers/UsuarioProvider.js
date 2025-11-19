@@ -3,6 +3,12 @@ import { UsuarioDTO } from '../models/Usuario.js'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 const USUARIOS_BASE = `${API_BASE_URL}/usuarios`
 
+function getAuthHeader() {
+  const token = localStorage.getItem('token')
+  return token ? { 'Authorization': `Bearer ${token}` } : {}
+}
+
+
 async function handleResponse(response) {
   if (!response.ok) {
     const text = await response.text().catch(() => '')
@@ -45,7 +51,7 @@ export const UsuarioProvider = {
     }
   },
   async eliminar(idUsuario) {
-    const res = await fetch(`${API_BASE_URL}/usuarios/${idUsuario}`, {
+    const res = await fetch(`${USUARIOS_BASE}/eliminar?idUsuario=${idUsuario}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +59,18 @@ export const UsuarioProvider = {
       }
     });
     return handleResponse(res);
+  },
+  
+  
+  async getAllUsuariosByPropietario() {
+    const res = await fetch(`${USUARIOS_BASE}/allUsersByPropietario`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      
+      }
+    })
+    return handleResponse(res)
   }
-  
-  
 }
