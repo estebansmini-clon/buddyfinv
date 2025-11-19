@@ -31,44 +31,66 @@ const routes = [
     component: () => import('../views/LoginView.vue')
   },
     {
-    path: '/dashboard',
-    component: DashboardLayout,
-    redirect: '/dashboard/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: DashboardOpciones
-      },
-     
-      { path: 'ventas', name: 'Ventas', component: VentaView },
-      { path: 'ingresos', name: 'Ingresos', component: IngresoTable },
-      { path: 'egresos', name: 'Egresos', component: EgresoView },
-      { path: 'inventario', name: 'inventario', component: ProductoView ,
-        children: [
-          {path: 'agregarproducto', name: 'AgregarProducto', component: AgregarProductoView},
-          {path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView},
-          {path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView}
-        ] 
-      }
-    ]
-
-  },  {
-    path: '/dashboardInv',
-    component: DashboardLayout,
-    redirect: '/dashboardInv/dashboardInv',
-    children: [
-      {
-        path: 'dashboardInv',
-        name: 'dashboardInv',
-        component: DashboardInventario
-      },
-      { path: 'verinventario', name: 'VerInventario', component: InvProductoView },
-      { path: 'añadirProducto', name: 'AñadirProducto', component: AgregarProductoView },
-      { path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView },
-      { path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView }
-    ]
-  }
+  path: '/dashboard',
+  component: DashboardLayout,
+  redirect: '/dashboard/dashboard',
+  meta: { requiresAuth: true }, // ← aquí
+  children: [
+    { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
+    { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
+    { path: 'ingresos', name: 'Ingresos', component: IngresoTable, meta: { requiresAuth: true } },
+    { path: 'egresos', name: 'Egresos', component: EgresoView, meta: { requiresAuth: true } },
+    {
+      path: 'inventario',
+      name: 'inventario',
+      component: ProductoView,
+      meta: { requiresAuth: true },
+      children: [
+        { path: 'agregarproducto', name: 'AgregarProducto', component: AgregarProductoView, meta: { requiresAuth: true } },
+        { path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView, meta: { requiresAuth: true } },
+        { path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView, meta: { requiresAuth: true } }
+      ]
+    }
+  ]
+}
+,  {
+  path: '/dashboardInv',
+  component: DashboardLayout,
+  redirect: '/dashboardInv/dashboardInv',
+  meta: { requiresAuth: true },
+  children: [
+    {
+      path: 'dashboardInv',
+      name: 'dashboardInv',
+      component: DashboardInventario,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'verinventario',
+      name: 'VerInventario',
+      component: InvProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'añadirProducto',
+      name: 'AñadirProducto',
+      component: AgregarProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'modificarproducto',
+      name: 'ModificarProducto',
+      component: ModificarProductoView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'reabastecerproducto',
+      name: 'ReabastecerProducto',
+      component: ReabastecerProductoView,
+      meta: { requiresAuth: true }
+    }
+  ]
+}
 
   
 
@@ -76,9 +98,21 @@ const routes = [
   
 
 
+
+
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+
+  if (to.meta.requiresAuth && !token) {
+    next('/login') // redirige si no hay token
+  } else {
+    next() // permite navegación
+  }
 })
 
 export default router
