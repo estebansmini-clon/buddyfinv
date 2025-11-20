@@ -29,6 +29,7 @@ import java.util.Optional;
 import com.es.backendbuddyfinv.dto.EgresoDTO;
 import com.es.backendbuddyfinv.dto.ProductoCrearDTO;
 import com.es.backendbuddyfinv.dto.ProductoEdicionDTO;
+import com.es.backendbuddyfinv.dto.ProductoReabastecerDTO;
 
 
 
@@ -70,11 +71,9 @@ public class ProductoController {
             return ResponseEntity.ok(egresos);
         }
  **/
-    @GetMapping("/test")
-    public String test() {
-        return "Controlador de productos funcionando correctamente!";
-    }
-    //se supone que este metodo no debe ir aqui, lo pondr ene comentarios mientras tanto
+
+    
+    //OBTENER PRODUCTOS POR USUARIO PROPIETARIO LADY VIDAL. COPIADO DE EGRESOS
 @GetMapping("/propietario")
         public ResponseEntity<List<ProductoDTO>> obtenerEgresosDetallados() {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -91,7 +90,8 @@ public class ProductoController {
             return ResponseEntity.ok(producto);
         }
 
-    //funcion para agregar productos
+
+    //AGREGAR PRODUCTOS O CREAR PRODUCTO  LADY VIDAL 
     @PostMapping("/agregar")
     public ResponseEntity<?> crearProducto(@RequestBody ProductoCrearDTO dto) {
         try {
@@ -126,27 +126,81 @@ public class ProductoController {
         }
     }
 
-    /** 
-    @GetMapping("/mine")
-    public ResponseEntity<List<ProductoDTO>> obtenerMisProductos() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // este es el subject del token
-    }**/
+  
 
-         /**List<Producto> productos = ProductoRepository.findByPropietarioUsuario(username);
-    List<ProductoDTO> productosDTO = productos.stream().map(p -> {
-        ProductoDTO dto = new ProductoDTO();
-        dto.setIdProducto(p.getIdProducto());
-        dto.setNombre(p.getNombre());
-        dto.setPrecio(p.getPrecio());
-        dto.setTipoProducto(p.getTipoProducto()!=null ? p.getTipoProducto().getNombre() : "Sin tipo");
-        dto.setEstadoProducto(p.getEstadoProducto()!=null ? p.getEstadoProducto().getNombre() : "Sin estado");
-        dto.setPropietario(p.getPropietario()!=null ? p.getPropietario().getNombre() : "Sin propietario");
-        return dto;
-    }).collect(Collectors.toList());
+//////////////////////////INICIO REABASTECER-BUSCAR LADY VIDAL 
+@GetMapping("/reabastecer/buscar/{idProducto}")
+public ResponseEntity<?> buscarProductoParaReabastecer(@PathVariable Long idProducto) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    return ResponseEntity.ok(productosDTO);
-}**/
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+    Long idUsuario = userDetails.getIdUsuario();
+    String rol = userDetails.getRol();
+    Long idAdministrador = userDetails.getIdAdministrador();
+
+    Optional<Producto> productoOpt = productoService.getProductoEditablePorCodigo(
+        idProducto,
+        idUsuario,
+        rol,
+        idAdministrador
+    );
+
+    if (productoOpt.isEmpty()) {
+        return ResponseEntity.status(404).body("No existe un producto con ese código o no tienes permiso para reabastecerlo.");
+    }
+
+    ProductoReabastecerDTO dto = new ProductoReabastecerDTO(productoOpt.get());
+    return ResponseEntity.ok(dto);
+}
+
+
+   //REABASTECER-GUARDAR
+@PutMapping("/reabastecer/guardar")
+public ResponseEntity<?> reabastecerProducto(@RequestBody ProductoReabastecerDTO dto) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+    Long idUsuario = userDetails.getIdUsuario();
+    String rol = userDetails.getRol();
+    Long idAdministrador = userDetails.getIdAdministrador();
+
+    Optional<Producto> productoOpt = productoService.getProductoEditablePorCodigo(
+        dto.getIdProducto(),
+        idUsuario,
+        rol,
+        idAdministrador
+    );
+
+    if (productoOpt.isEmpty()) {
+        return ResponseEntity.status(404).body("Producto no encontrado o sin permisos.");
+    }
+
+    Producto producto = productoOpt.get();
+
+    // Validaciones básicas (pueden complementarse con anotaciones en el DTO)
+ 
+        if (dto.getCantidad() <= 0) {
+            return ResponseEntity.badRequest().body("La cantidad a reabastecer debe ser mayor a cero.");
+        }
+
+    producto.getDetalleInventarios().forEach(detalle -> {
+        detalle.setCantidadDisponible(detalle.getCantidadDisponible() + dto.getCantidad());
+    });
+
+    //USE EL MISMO CREATEPRODUCTOMODIFICAR DE SANTIAGO PARA EVITAR DUPLICAR CODIGO
+    productoService.createProductoModificar(producto);
+    return ResponseEntity.ok("Producto actualizado correctamente.");
+}
+//////////////////////////FIN REABASTECER LADY VIDAL
+
 
 ////SANTIAGO MONTENEGRO RUALES MODFICAR PRODUCTO INICIO
 @GetMapping("/modificar/buscar/{idProducto}")
@@ -195,7 +249,7 @@ public ResponseEntity<?> guardarModificacionProducto(@RequestBody ProductoEdicio
         idUsuario,
         rol,
         idAdministrador
-    );
+    ); 
 
     if (productoOpt.isEmpty()) {
         return ResponseEntity.status(404).body("Producto no encontrado o sin permisos.");

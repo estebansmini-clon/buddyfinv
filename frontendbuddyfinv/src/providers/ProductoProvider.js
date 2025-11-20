@@ -1,4 +1,5 @@
 
+import { ProductoReabastecerDTO } from '@/models/ProductoReabastecer.js'
 import { ProductoDTO } from '../models/Producto.js'
 import { ProductoEdicionDTO } from '../models/ProductoEdicion.js'
 
@@ -86,6 +87,34 @@ export const ProductoProvider = {
     })
     return handleResponse(res)
   },
+
+  //REABASTECER PRODUCTO LADY VIDAL
+    async reabastecer(productoReabastecerDTO) {
+      const res = await fetch(`${PRODUCTOS_BASE}/reabastecer/guardar`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeader()
+        },
+        body: JSON.stringify(productoReabastecerDTO)
+      })
+      return handleResponse(res)
+    },
+
+    async buscarPorCodigoReabastecer(codigo) {
+      const res = await fetch(`${PRODUCTOS_BASE}/reabastecer/buscar/${codigo}`, {
+        method: 'GET',
+        headers: { ...getAuthHeader() },
+        credentials: 'include'
+      })
+      const data = await handleResponse(res)
+      return new ProductoReabastecerDTO(data)
+    },
+
+  //FIN REABASTECER LADY VIDAL
+
+
 
   // 🔹 Eliminar un producto por ID
   async delete(id) {
