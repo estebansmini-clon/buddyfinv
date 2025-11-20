@@ -50,6 +50,26 @@ export const UsuarioProvider = {
       return { success: false, message: 'Error de conexión con el servidor' };
     }
   },
+
+  async crearEmpleado(datos){
+    const res = await fetch(`${USUARIOS_BASE}/agregar`, {
+      method: 'POST',
+      headers: {'content-type': 'application/json', ...getAuthHeader()},
+      body: JSON.stringify(datos)
+    })
+    const data = await handleResponse(res)
+    return data
+  },
+
+  async listarEmpleados(){
+    const res = await fetch(`${USUARIOS_BASE}/empleados`, {
+      method: 'GET',
+      headers: {'content-type': 'application/json', ...getAuthHeader()}
+    })
+    const data = await handleResponse(res)
+    return Array.isArray(data) ? data : []
+  },
+  
   async eliminar(idUsuario) {
     const res = await fetch(`${USUARIOS_BASE}/eliminar?idUsuario=${idUsuario}`, {
       method: 'DELETE',

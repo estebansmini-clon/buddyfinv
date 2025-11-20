@@ -20,7 +20,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     //esteban moreno uso este metodo para crear ventas
     Optional<Usuario> findByUsuario(String usuario);
 
-
+    List<Usuario> findByAdministradorId(Long idAdministrador);
     
     boolean existsByNitUsuario(String nitUsuario);
     boolean existsByNombre(String nombre);

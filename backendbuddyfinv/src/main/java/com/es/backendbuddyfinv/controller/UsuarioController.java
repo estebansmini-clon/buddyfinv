@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import com.es.backendbuddyfinv.dto.UsuarioDTO;
 import com.es.backendbuddyfinv.dto.PerfilUsuarioDTO;
+import com.es.backendbuddyfinv.dto.UsuarioCrearDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import com.es.backendbuddyfinv.dto.UsuarioDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
 import com.es.backendbuddyfinv.model.Usuario;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
+import com.es.backendbuddyfinv.security.JwtUtil;
 import com.es.backendbuddyfinv.service.impl.UsuarioService;
 
 @RestController
@@ -41,6 +43,14 @@ public class UsuarioController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+    //Obtener id Admin
+    private Long obtenerAdministradorDesdeToken(String authHeader){
+        String token = authHeader.replace("Bearer", "");
+        return jwtUtil.getIdAdministrador(token);
+    }
 
     // Registro de usuario
     @PostMapping("/registrar")
@@ -97,6 +107,23 @@ public class UsuarioController {
         Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
         return usuario.map(ResponseEntity::ok)
                       .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/agregar")
+    public ResponseEntity<?> crearEmpleado(@RequestBody UsuarioCrearDTO dto, @RequestHeader("Authorization") String authHeader){
+        long idAdmin= obtenerAdministradorDesdeToken(authHeader);
+
+        Usuario nuevoEmpleado = usuarioService.crearEmpleado(idAdmin, dto);
+
+        return ResponseEntity.ok(nuevoEmpleado);
+    }
+
+    @GetMapping("/empleados")
+    public ResponseEntity<List<UsuarioDTO>> listarEmpleados(@RequestHeader("Authorization") String authHeader){
+        Long adminId = obtenerAdministradorDesdeToken(authHeader);
+        List<Usuario> empleados = usuarioService.listarEmpleadosPorAdmin(adminId);
+        List<UsuarioDTO> dto = empleados.stream().map(UsuarioDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(dto);
     }
 
     // Actualizar usuario
