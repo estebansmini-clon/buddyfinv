@@ -52,7 +52,7 @@ export const UsuarioProvider = {
   },
   
   async crearEmpleado(datos){
-    const res = await fetch('${USUARIOS_BASE}/agregar', {
+    const res = await fetch(`${USUARIOS_BASE}/agregar`, {
       method: 'POST',
       headers: {'content-type': 'application/json', ...getAuthHeader()},
       body: JSON.stringify(datos)
@@ -62,7 +62,7 @@ export const UsuarioProvider = {
   },
 
   async listarEmpleados(){
-    const res = await fetch('${USUARIOS_BASE}/empleados', {
+    const res = await fetch(`${USUARIOS_BASE}/empleados`, {
       method: 'GET',
       headers: {'content-type': 'application/json', ...getAuthHeader()}
     })

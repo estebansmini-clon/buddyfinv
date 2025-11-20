@@ -23,6 +23,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByNombre(String nombre);
     boolean existsByNegocio(String negocio);
 
+    List<Usuario> findByAdministradorId(Long idAdministrador);
+
     @Query("SELECT new com.es.backendbuddyfinv.dto.UsuarioDTOfind(u.id,u.nitUsuario, u.nombre, u.email, u.usuario) " +
     "FROM Usuario u WHERE u.administrador.id = :idPropietario")
 List<UsuarioDTOfind> findByPropietario(@Param("idPropietario") Long idPropietario);

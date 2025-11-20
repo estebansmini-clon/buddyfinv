@@ -116,6 +116,14 @@ public class UsuarioController {
         return ResponseEntity.ok(nuevoEmpleado);
     }
 
+    @GetMapping("/empleados")
+    public ResponseEntity<List<UsuarioDTO>> listarEmpleados(@RequestHeader("Authorization") String authHeader){
+        Long adminId = obtenerAdministradorDesdeToken(authHeader);
+        List<Usuario> empleados = usuarioService.listarEmpleadosPorAdmin(adminId);
+        List<UsuarioDTO> dto = empleados.stream().map(UsuarioDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(dto);
+    }
+
     // Actualizar usuario
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetails) {

@@ -9,7 +9,7 @@ import ModificarProductoView from '../views/ModificarProductoView.vue'
 import ReabastecerProductoView from '../views/ReabastecerProductoView.vue'
 import AgregarEmpleadoView from '@/views/AgregarEmpleadoView.vue'
 import ListaEmpleadosView from '@/views/ListaEmpleadosView.vue'
-//import TestProducto from '../views/TestProducto.vue'
+//import TestProducto from '../view s/TestProducto.vue'
 
 import LoginView from '@/views/LoginView.vue'
 import EgresosTable from '@/components/EgresosTable.vue'
@@ -112,19 +112,19 @@ const routes = [
       meta: { requiresAuth: true }
     },
     {
-      path: 'empleados',
+      path: 'usuarios/empleados',
       name: 'ListaEmpleados',
       component: ListaEmpleadosView,
-      meta: { requiresAuth: true }
+      meta: {requiresAuth: true}
     },
     {
-      path: 'empleados/agregar',
+      path: 'usuarios/agregar',
       name: 'AgregarEmpleado',
       component: AgregarEmpleadoView,
       meta: { requiresAuth: true }
     },
     {
-      path: 'eliminarusuario',
+      path: 'usuarios',
       name: 'Usuario',
       component: ConfiguracionEliminarUsuario,
       meta: { requiresAuth: true }

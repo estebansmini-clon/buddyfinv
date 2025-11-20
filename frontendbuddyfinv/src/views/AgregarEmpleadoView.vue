@@ -97,7 +97,7 @@
           // limpiar form
           this.form = { nitUsuario: '', nombre: '', email: '', usuario: '', password: '' }
           // opcional: redirigir a lista
-          setTimeout(() => this.$router.push({ name: 'ListaEmpleados' }), 1000)
+          setTimeout(() => this.$router.push({ name: 'Usuario' }), 1000)
         } catch (err) {
           this.mensaje = err.message || 'Error al crear empleado.'
           this.success = false
@@ -143,10 +143,15 @@
     margin-top:18px;
     width:100%;
     padding:12px;
-    background:#004aad;
+    background:#ff8800;
     color:white;
     border-radius:8px;
-    border:none
+    border:none;
+    font-weight: 600;
+    transition: .2s;
+}
+button:hover{
+    background:#e56f00;
 }
   .error{
     color:#c0392b;
@@ -167,6 +172,11 @@
     margin-top:6px
 }
   @media (max-width:768px){.grid{grid-template-columns:1fr}}
-
-    </style>
+  label, h2 {
+  color: #000 !important;
+}
+input {
+  color: #000 !important;
+}
+</style>
   

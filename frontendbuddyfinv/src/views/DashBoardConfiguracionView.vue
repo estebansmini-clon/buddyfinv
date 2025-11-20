@@ -14,6 +14,12 @@
             <div class="card-button">Usuarios</div>
             <p class="card-description">Gestiona los usuarios registrados en el sistema</p>
           </article>
+
+          <!-- Empleados  -->
+          <article class="card card--empleados" role="button" tabindex="0" @click="irAEmpleados">
+            <div class="card-button">Empleados</div>
+            <p class="card-description">Gestiona empleados y crea nuevos registros</p>
+          </article>
   
           <!-- Roles -->
           <article class="card card--roles" role="button" tabindex="0" @click="irARoles">
@@ -52,6 +58,7 @@
   const irAPermisos = () => router.push({ name: 'Permisos' })
   const irAPreferencias = () => router.push({ name: 'Preferencias' })
   const irAUsuarios = () => router.push({ name: 'Usuario' })
+  const irAEmpleados = () => router.push({name: 'ListaEmpleados'})
   </script>
   
   <style scoped>
@@ -124,5 +131,8 @@
   }
   .card--eliminar {
     background-color: #ffebee;
+  }
+  .card--empleados {
+  background-color: #e8f5e9; /* verde suave */
   }
   </style>

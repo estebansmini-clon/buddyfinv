@@ -78,6 +78,10 @@ public class UsuarioService {
         return usuarioRepository.save(empleado);
     }
 
+    public List<Usuario> listarEmpleadosPorAdmin(Long idAdmin){
+        return usuarioRepository.findByAdministradorId(idAdmin);
+    }
+
     // Eliminar un usuario
     public boolean deleteUsuario(Long id) {
         if (usuarioRepository.existsById(id)) {
