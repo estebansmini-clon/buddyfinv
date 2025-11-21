@@ -13,6 +13,8 @@ import InvProductoView from '../views/InvProductoView.vue'
 import DashboardInventario from '../views/DashboardInventario.vue'
 import DashBoardConfiguracionView from '../views/DashBoardConfiguracionView.vue'
 import ConfiguracionEliminarUsuario from '../components/configuracionEliminarUsuario.vue'
+import AgregarEmpleadoView from '@/views/AgregarEmpleadoView.vue'
+import ListaEmpleadosView from '@/views/ListaEmpleadosView.vue'
 
 
 const routes = [
@@ -110,6 +112,18 @@ const routes = [
       path: 'eliminarusuario',
       name: 'Usuario',
       component: ConfiguracionEliminarUsuario,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: 'usuarios/empleados',
+      name: 'ListaEmpleados',
+      component: ListaEmpleadosView,
+      meta: {requiresAuth: true}
+    },
+    {
+      path: 'usuarios/agregar',
+      name: 'AgregarEmpleado',
+      component: AgregarEmpleadoView,
       meta: { requiresAuth: true }
     }
 

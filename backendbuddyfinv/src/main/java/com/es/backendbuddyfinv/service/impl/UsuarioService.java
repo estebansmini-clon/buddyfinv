@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.es.backendbuddyfinv.dto.UsuarioCrearDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
 import com.es.backendbuddyfinv.model.Rol;
 import com.es.backendbuddyfinv.model.Usuario;
@@ -52,6 +53,33 @@ public class UsuarioService {
             return usuarioRepository.save(usuario);
         }
         return null;
+    }
+
+    public Usuario crearEmpleado(Long idAdmin, UsuarioCrearDTO dto){
+        if(usuarioRepository.existsByUsuarioOrEmail(dto.getUsuario(), dto.getEmail())){
+            throw new RuntimeException("Usuario o email ya existe");
+        }
+        Usuario admin = usuarioRepository.findById(idAdmin)
+        .orElseThrow(() -> new RuntimeException("administrador no encontrado"));
+
+        Rol rolEmpleado = rolRepository.findByDescripcion("EMPLEADO")
+        .orElseThrow(() -> new RuntimeException("Rol EMPLEADO no encrontrado"));
+
+        Usuario empleado = new Usuario();
+        empleado.setNitUsuario(dto.getNitUsuario());
+        empleado.setNombre(dto.getNombre());
+        empleado.setEmail(dto.getEmail());
+        empleado.setUsuario(dto.getUsuario());
+        empleado.setPassword(dto.getPassword());
+        empleado.setNegocio(admin.getNegocio());
+        empleado.setRol(rolEmpleado);
+        empleado.setAdministrador(admin);
+
+        return usuarioRepository.save(empleado);
+    }
+
+    public List<Usuario> listarEmpleadosPorAdmin(Long idAdmin){
+        return usuarioRepository.findByAdministradorId(idAdmin);
     }
 
     // Eliminar un usuario

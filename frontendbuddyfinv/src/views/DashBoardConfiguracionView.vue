@@ -34,9 +34,10 @@
           </article>
   
           <!-- Eliminar Usuario -->
-          <article class="card card--eliminar" role="button" tabindex="0" @click="irAEliminarUsuario">
-            <div class="card-button">Eliminar Usuario</div>
-            <p class="card-description">Elimina usuarios del sistema de forma segura</p>
+           <!-- Agregar Empleado -->
+          <article class="card card--empleados" role="button" tabindex="0" @click="irAEmpleados">
+            <div class="card-button">Empleados</div>
+            <p class="card-description">Gestiona empleados y crea nuevos registros</p>
           </article>
         </div>
       </section>
@@ -52,6 +53,7 @@
   const irAPermisos = () => router.push({ name: 'Permisos' })
   const irAPreferencias = () => router.push({ name: 'Preferencias' })
   const irAUsuarios = () => router.push({ name: 'Usuario' })
+  const irAEmpleados = () => router.push({name: 'ListaEmpleados'})
   </script>
   
   <style scoped>
@@ -122,7 +124,8 @@
   .card--preferencias {
     background-color: #fce4ec;
   }
-  .card--eliminar {
-    background-color: #ffebee;
+  /* modificada a agregar empleados*/
+  .card--empleados {
+    background-color: #e8f5e9;
   }
   </style>
