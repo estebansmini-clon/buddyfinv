@@ -14,10 +14,11 @@ public class VentaDetalladaDTO {
     private String estadoVenta;
     private String metodoPago;
     private String empleado;
+    private String cliente;
     private List<DetalleProductoDTO> productos;
 
     public VentaDetalladaDTO(Long idVenta, LocalDateTime fecha, double total,
-                             String estadoVenta, String metodoPago, String empleado,
+                             String estadoVenta, String metodoPago, String empleado, String cliente,
                              List<DetalleProductoDTO> productos) {
         this.idVenta = idVenta;
         this.fecha = fecha;
@@ -25,6 +26,15 @@ public class VentaDetalladaDTO {
         this.estadoVenta = estadoVenta;
         this.metodoPago = metodoPago;
         this.empleado = empleado;
+        this.cliente = cliente;
         this.productos = productos;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 }

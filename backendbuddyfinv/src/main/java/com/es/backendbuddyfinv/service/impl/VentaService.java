@@ -67,6 +67,7 @@ public class VentaService {
         return ventas.stream().map(v -> {
             List<DetalleProductoDTO> productos = v.getDetalleVentas().stream()
                 .map(dv -> new DetalleProductoDTO(
+                    dv.getProducto().getIdProducto(),
                     dv.getProducto().getNombre(),
                     dv.getCantidad(),
                     dv.getSubtotal(),
@@ -82,6 +83,7 @@ public class VentaService {
                 v.getEstadoVenta().getObservacion(),
                 v.getMetodoPago().getDescripcion(),
                 v.getUsuario().getNombre(),
+                v.getCliente(),
                 productos
             );
         }).collect(Collectors.toList());
