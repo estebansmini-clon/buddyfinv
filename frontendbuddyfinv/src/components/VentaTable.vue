@@ -14,6 +14,7 @@
             <span>ID</span>
             <span>Fecha y Hora</span>
             <span>Total</span>
+            <span>Cliente</span>
             <span>Empleado</span>
           </div>
 
@@ -27,10 +28,12 @@
             <span class="cell">{{ venta.idVenta }}</span>
             <span class="cell">{{ new Date(venta.fecha).toLocaleString() }}</span>
             <span class="cell">${{ venta.total.toFixed(2) }}</span>
+            <span class="cell">{{ venta.cliente || venta.propietario?.nombre || venta.propietario }}</span>
             <span class="cell">{{ venta.empleado }}</span>
 
             <transition name="fade">
               <div v-if="ventaSeleccionada === venta.idVenta" class="detalle-expandido">
+                <p><strong>Cliente:</strong> {{ venta.cliente || '—' }}</p>
                 <p><strong>Propietario:</strong> {{ venta.propietario?.nombre || venta.propietario }}</p>
                 <p><strong>Método de pago:</strong> {{ venta.metodoPago }}</p>
                 <p><strong>Estado:</strong> {{ venta.estadoVenta }}</p>
@@ -38,6 +41,7 @@
                 <table class="detalle-table">
                   <thead>
                     <tr>
+                      <th>ID Prod</th>
                       <th>Producto</th>
                       <th>Cantidad</th>
                       <th>Precio Unitario</th>
@@ -46,7 +50,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="producto in venta.productos" :key="producto.nombre">
+                    <tr v-for="producto in venta.productos" :key="producto.productoId || producto.nombreProducto">
+                      <td>{{ producto.productoId }}</td>
                       <td>{{ producto.nombreProducto }}</td>
                       <td>{{ producto.cantidad }}</td>
                       <td>${{ producto.precioUnitario?.toFixed(2) || '—' }}</td>
@@ -169,7 +174,7 @@ function mostrarAlerta(mensaje) {
 .venta-table .table-header,
 .venta-table .table-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   padding: 12px 16px;
   font-size: 14px;
   font-weight: 500;
