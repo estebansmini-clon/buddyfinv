@@ -202,7 +202,5 @@ export default {
 button { 
   cursor: pointer;
   height: fit-content;
-  
-  
 }
 </style>

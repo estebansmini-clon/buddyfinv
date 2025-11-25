@@ -154,12 +154,13 @@ function mostrarAlerta(mensaje) {
 }
 
 .btn.consultar {
-  background-color: #3498db;
+  background-color: #e67e22;
   color: white;
+  border-radius: 8px;
 }
 
 .btn.consultar:hover {
-  background-color: #2980b9;
+  background-color: #d35400;
 }
 
 .registro-scroll {
