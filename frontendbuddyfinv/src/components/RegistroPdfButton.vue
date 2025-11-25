@@ -123,14 +123,15 @@ export default {
       cursorY += 25
 
       // --- TABLA DE PRODUCTOS ---
-      const head = [['Producto', 'Cant.', 'Precio Unit.', 'Subtotal']]
+      const head = [['ID', 'Producto', 'Cant.', 'Precio Unit.', 'Subtotal']]
       const detalles = venta.detalles || venta.productos || venta.detallesVentas || []
       const body = (detalles || []).map(d => {
+        const idProd = d.productoId || d.id || '—'
         const nombre = d.nombreProducto || d.nombre || d.productoNombre || `Producto ${d.productoId || '—'}`
         const cantidad = d.cantidad ?? 0
         const precio = d.precioUnitario ?? d.precio ?? 0
         const subtotal = Number(precio) * Number(cantidad)
-        return [nombre, String(cantidad), this.formatPrecio(precio), this.formatPrecio(subtotal)]
+        return [idProd, nombre, String(cantidad), this.formatPrecio(precio), this.formatPrecio(subtotal)]
       })
 
       // Usar autoTable directamente (importado estáticamente)
@@ -157,10 +158,11 @@ export default {
           borderColor: [230, 126, 34] 
         },
         columnStyles: {
-          0: { cellWidth: 'auto' }, 
-          1: { cellWidth: 40, halign: 'center' }, 
-          2: { cellWidth: 80, halign: 'right' }, 
-          3: { cellWidth: 80, halign: 'right' }  
+          0: { cellWidth: 40, halign: 'center' }, // ID
+          1: { cellWidth: 'auto' }, // Producto
+          2: { cellWidth: 40, halign: 'center' }, // Cantidad
+          3: { cellWidth: 80, halign: 'right' }, // Precio
+          4: { cellWidth: 80, halign: 'right' }  // Subtotal
         }
       })
       cursorY = doc.lastAutoTable.finalY + 20
