@@ -1,6 +1,6 @@
 <template>
   <div class="venta-filtros">
-    <h3 class="filtros-title">Filtrar recibos</h3>
+    <h3 class="filtros-title">Filtrar Registros</h3>
 
     <form class="filtros-row" @submit.prevent>
       <div class="field">
@@ -117,6 +117,7 @@ function resetFilters() {
 <style scoped>
 .venta-filtros {
   width: 100%;
+  height: 100%;
   background: #fffaf3;
   padding: 14px 18px;
   border-radius: 12px;

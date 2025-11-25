@@ -3,7 +3,7 @@
     <div v-if="cargando">Cargando tus ventas...</div>
     <div v-else-if="ventas.length === 0">No tienes ventas registradas.</div>
     <VentaFilters :ventas="ventas" @update="ventasFiltradas = $event" />
-    <VentaTable :ventas="ventasFiltradas" />
+    <RegistroTable :ventas="ventasFiltradas" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 import { onMounted, ref } from 'vue'
 import { VentaProvider } from '../providers/VentaProvider'
 import { useUsuarioStore } from '../stores/usuarioStore'
-import VentaTable from '../components/VentaTable.vue'
+import RegistroTable from '../components/RegistroTable.vue'
 import VentaFilters from '../components/VentaFilters.vue'
 
 // `ventas` guarda la lista cruda recibida desde backend; `ventasFiltradas` es la lista que renderiza la tabla
@@ -37,3 +37,10 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+
+.consultar-venta-container {
+  height: 100%;
+}
+</style>
