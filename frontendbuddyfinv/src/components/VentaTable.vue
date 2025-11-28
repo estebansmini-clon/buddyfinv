@@ -74,9 +74,12 @@
 
               <div class="form-group">
                 <label for="metodoPago">Método de Pago (Opcional)</label>
-                <select id="metodoPago" v-model="filtros.metodoPago">
+                 <select id="metodoPago" v-model="filtros.metodoPago">
                   <option value="">-- Seleccione --</option>
-                  <option v-for="metodo in metodosPago" :key="metodo.idMetodoPago" :value="metodo.descripcion">
+                  <option 
+                    v-for="(metodo, index) in metodosPago" 
+                    :key="index" 
+                    :value="metodo.descripcion">
                     {{ metodo.descripcion }}
                   </option>
                 </select>
@@ -164,7 +167,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import {defineProps, ref, computed, watch} from 'vue'
+
+/* defineProps({
+  ventas: Array
+})
+*/
+  
 
 const props = defineProps({
   ventas: Array
@@ -194,16 +203,23 @@ const filtrosAplicados = ref({
 })
 
 // Extraer métodos de pago únicos de las ventas cargadas
-onMounted(() => {
-  if (props.ventas && props.ventas.length > 0) {
-    // Extraer métodos de pago únicos de las ventas
-    const metodosUnicos = [...new Set(props.ventas.map(v => v.metodoPago).filter(Boolean))]
-    metodosPago.value = metodosUnicos.map(descripcion => ({
-      descripcion
-    }))
-    console.log('Métodos de pago extraídos de ventas:', metodosPago.value)
-  }
-})
+watch(
+  () => props.ventas,
+  (nuevasVentas) => {
+    if (nuevasVentas && nuevasVentas.length > 0) {
+      const metodosUnicos = [...new Set(nuevasVentas.map(v => v.metodoPago).filter(Boolean))]
+      metodosPago.value = metodosUnicos.map(descripcion => ({
+        descripcion
+      }))
+      console.log('✅ Métodos de pago actualizados:', metodosPago.value)
+      console.log('Total de métodos únicos:', metodosPago.value.length)
+    } else {
+      console.warn('⚠️ No hay ventas disponibles')
+    }
+  },
+  { deep: true }
+)
+
 
 // Computed para ventas filtradas
 const ventasFiltradas = computed(() => {
