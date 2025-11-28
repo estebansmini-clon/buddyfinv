@@ -1,6 +1,8 @@
 package com.es.backendbuddyfinv.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +69,7 @@ public class VentaService {
         return ventas.stream().map(v -> {
             List<DetalleProductoDTO> productos = v.getDetalleVentas().stream()
                 .map(dv -> new DetalleProductoDTO(
+                    dv.getProducto().getIdProducto(),
                     dv.getProducto().getNombre(),
                     dv.getCantidad(),
                     dv.getSubtotal(),
@@ -75,13 +78,16 @@ public class VentaService {
                 ))
                 .collect(Collectors.toList());
     
+            // AGREGADO: incluir id del usuario (empleado) que hizo la venta en el DTO
             return new VentaDetalladaDTO(
                 v.getIdVenta(),
                 v.getFecha(),
                 v.getTotal(),
                 v.getEstadoVenta().getObservacion(),
                 v.getMetodoPago().getDescripcion(),
-                v.getUsuario().getNombre(),
+                v.getUsuario() != null ? v.getUsuario().getNombre() : null,
+                (v.getUsuario() != null && v.getUsuario().getId() != null) ? v.getUsuario().getId() : null, // empleadoId (seguro)
+                v.getCliente(),
                 productos
             );
         }).collect(Collectors.toList());
@@ -281,6 +287,66 @@ public class VentaService {
 
         return ventaGuardada;
     }
+
+    /*public List<VentaDetalladaDTO> filtrarVentas(
+        Long idPropietario,
+        Long idVenta,
+        String fechaDesde,
+        String fechaHasta,
+        Double totalMin,
+        Double totalMax,
+        String metodoPago
+     
+    )   { // 1. Convertir fechas
+    LocalDateTime desde = null;
+    LocalDateTime hasta = null;
+
+    if (fechaDesde != null && !fechaDesde.isEmpty()) {
+        desde = LocalDate.parse(fechaDesde).atStartOfDay();
+    }
+    if (fechaHasta != null && !fechaHasta.isEmpty()) {
+        hasta = LocalDate.parse(fechaHasta).atTime(23, 59, 59);
+    }
+
+    // 2. Llamar al repository
+    List<Venta> ventas = ventaRepository.filtrarVentas(
+            idPropietario,
+            idVenta,
+            desde,
+            hasta,
+            totalMin,
+            totalMax,
+            metodoPago
+    );
+
+    // 3. Convertir a DTO detallado (igual que tu método listarVentasDetalladas)
+    return ventas.stream().map(v -> {
+
+        List<DetalleProductoDTO> productos = v.getDetalleVentas().stream()
+                .map(dv -> new DetalleProductoDTO(
+                        dv.getProducto().getIdProducto(),
+                        dv.getProducto().getNombre(),
+                        dv.getCantidad(),
+                        dv.getSubtotal(),
+                        dv.getProducto().getEstadoProducto().getObservacion(),
+                        dv.getProducto().getPrecio()
+                )).collect(Collectors.toList());
+
+        return new VentaDetalladaDTO(
+                v.getIdVenta(),
+                v.getFecha(),
+                v.getTotal(),
+                v.getEstadoVenta().getObservacion(),
+                v.getMetodoPago().getDescripcion(),
+                v.getUsuario().getNombre(),
+                v.getCliente(),
+                productos
+        );
+    }).collect(Collectors.toList());
+}
+*/
+
+
 
 
 

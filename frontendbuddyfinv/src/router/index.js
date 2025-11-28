@@ -139,10 +139,6 @@ const routes = [
     children: [
       { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
 
-      // Ventas listado global (opcional). Si prefieres mantener solo la ruta dentro de acciones, puedes comentar/eliminar esta línea.
-      // { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
-
-      // Acciones (parent) con children: RegistrarVentas y listado de ventas dentro de Acciones
       {
         path: 'acciones',
         name: 'acciones',
@@ -159,6 +155,12 @@ const routes = [
             path: 'ventas',
             name: 'Ventas',
             component: () => import('@/views/VentaView.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'consultar-venta',
+            name: 'ConsultarVenta',
+            component: () => import('@/views/ConsultarVentaView.vue'),
             meta: { requiresAuth: true }
           }
         ]
@@ -217,7 +219,23 @@ const routes = [
         meta: { requiresAuth: true }
       }
     ]
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPasswordView.vue')
+  },
+  {
+    path: '/verify-code',
+    name: 'verify-code',
+    component: () => import('@/views/VerifyCodeView.vue')
+  },
+  {
+    path: '/reset-password',
+    name: 'change-password',
+    component: () => import('@/views/ChangePasswordView.vue')
   }
+  
 ]
 
 const router = createRouter({
