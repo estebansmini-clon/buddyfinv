@@ -55,8 +55,8 @@
       </p>
 
       <div class="links">
-        <router-link to="/registro">Registrar negocio</router-link>
-        <a href="#">Recuperar usuario</a> |
+        <router-link to="/registro">Registrar negocio</router-link> |
+        <router-link to="/recuperar-usuario">Recuperar usuario</router-link> |
         <router-link to="/forgot-password">Recuperar contraseña</router-link>
       </div>
     </div>

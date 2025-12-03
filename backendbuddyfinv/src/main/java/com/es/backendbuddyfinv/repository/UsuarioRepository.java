@@ -16,7 +16,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByUsuario(String usuario);
     boolean existsByEmail(String email);
     boolean existsByUsuarioOrEmail(String usuario, String email);
-    Usuario findByEmail(String email);
+    //David solarte mifico el buscar por email (pasa a ser optional)
+    Optional <Usuario> findByEmail(String email);
     //esteban moreno uso este metodo para crear ventas
     Optional<Usuario> findByUsuario(String usuario);
 
