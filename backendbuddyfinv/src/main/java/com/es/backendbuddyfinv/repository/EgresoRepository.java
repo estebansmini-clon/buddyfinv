@@ -12,7 +12,17 @@ import com.es.backendbuddyfinv.model.Egreso;
 
 @Repository
 public interface EgresoRepository extends JpaRepository<Egreso, Long> {
-    
+    //////////////santiago
+    @Query("""
+        SELECT e.tipoEgreso.descripcion, SUM(e.costo)
+        FROM Egreso e
+        WHERE e.propietario.id = :idPropietario
+        GROUP BY e.tipoEgreso.descripcion
+        ORDER BY SUM(e.costo) DESC
+    """)
+    List<Object[]> findGastosPorCategoria(@Param("idPropietario") Long idPropietario);
+
+    ///////////////fin santiago
     
     
     @Query("""

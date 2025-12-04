@@ -22,7 +22,7 @@
           <span>INVENTARIO</span>
         </button>
         
-        <button @click="ir('graficas')" :class="{ activo: ruta === 'graficas' }">
+        <button @click="ir('Graficos')" :class="{ activo: ruta === 'Graficos' }">
           <IconGraficas />
           <span>GRAFICAS</span>
         </button>

@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.es.backendbuddyfinv.dto.DetalleProductoDTO;
 import com.es.backendbuddyfinv.dto.DetalleVentaCrearDTO;
 import com.es.backendbuddyfinv.dto.DetalleVentaResponseDTO;
+import com.es.backendbuddyfinv.dto.ProductoEstrellaDTO;
+import com.es.backendbuddyfinv.dto.VentasSerieDTO;
 import com.es.backendbuddyfinv.dto.VentaCrearDTO;
 import com.es.backendbuddyfinv.dto.VentaDetalladaDTO;
 import com.es.backendbuddyfinv.dto.VentaResponseDTO;
@@ -35,6 +37,7 @@ import com.es.backendbuddyfinv.repository.ProductoRepository;
 import com.es.backendbuddyfinv.repository.UsuarioRepository;
 import com.es.backendbuddyfinv.repository.VentaRepository;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
+import java.math.BigDecimal;
 
 @Service
 public class VentaService {
@@ -287,6 +290,30 @@ public class VentaService {
 
         return ventaGuardada;
     }
+
+    ///////////////////////////////////Santiago Intengo de graficas
+    public List<VentasSerieDTO> graficos(Long idPropietario) {
+        List<Object[]> results = ventaRepository.findVentasTotalesPorFecha(idPropietario);
+    
+        return results.stream()
+            .map(row -> new VentasSerieDTO(
+                row[0].toString(),                       // periodo (fecha)
+                new BigDecimal(row[1].toString())        // total de ventas
+            ))
+            .collect(Collectors.toList());
+    }
+
+    public List<ProductoEstrellaDTO> graficosProductosEstrella(Long idPropietario) {
+        List<Object[]> results = detalleVentaRepository.findProductosEstrella(idPropietario);
+    
+        return results.stream()
+            .map(row -> new ProductoEstrellaDTO(
+                row[0].toString(),                  // nombre del producto
+                Long.valueOf(row[1].toString())     // cantidad vendida
+            ))
+            .collect(Collectors.toList());
+    }
+    /////////////////////////////////////////Santiago Intengo de graficas
 
     /*public List<VentaDetalladaDTO> filtrarVentas(
         Long idPropietario,

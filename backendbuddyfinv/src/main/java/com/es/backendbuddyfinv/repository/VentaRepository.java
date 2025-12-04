@@ -17,6 +17,17 @@ import com.es.backendbuddyfinv.model.Venta;
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Long> {
 
+
+    @Query("""
+    SELECT v.fecha, SUM(v.total)
+    FROM Venta v
+    WHERE v.propietario.id = :idPropietario
+    AND v.estadoVenta.observacion LIKE '%PAGADA%'
+    GROUP BY v.fecha
+    ORDER BY v.fecha ASC
+""")
+List<Object[]> findVentasTotalesPorFecha(@Param("idPropietario") Long idPropietario);
+
     @Query("SELECT DISTINCT v FROM Venta v " +
     "JOIN FETCH v.usuario u " +
     "JOIN FETCH v.estadoVenta ev " +

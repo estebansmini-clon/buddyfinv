@@ -60,7 +60,10 @@ public class SecurityConfig {
                 .requestMatchers("/productos/**").authenticated() 
                 .requestMatchers("/ventas/detalladas").hasRole("ADMIN")
                 .requestMatchers("ventas/crearVenta").authenticated()
-
+                .requestMatchers("ventas/graficos").hasRole("ADMIN")
+                .requestMatchers("ventas/graficos/productos-estrella").hasRole("ADMIN")
+            
+                .requestMatchers("Egresos/graficosGastos").hasRole("ADMIN")
                 .requestMatchers("/Egresos/**").hasRole("ADMIN")
                 .requestMatchers("/ingresos/**").hasRole("ADMIN")
                 .requestMatchers("/tipo-egresos/**").authenticated()
