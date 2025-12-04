@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.es.backendbuddyfinv.dto.UsuarioDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
+import com.es.backendbuddyfinv.dto.UsuarioEdicionDTO;
 import com.es.backendbuddyfinv.dto.UsuarioResponseDTO;
 import com.es.backendbuddyfinv.model.Usuario;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
@@ -127,32 +128,26 @@ public class UsuarioController {
 
     // Actualizar usuario
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetails) {
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioEdicionDTO dto) {
         try {
-            Optional<Usuario> usuarioOptional = usuarioService.getUsuarioById(id);
-            
-            if (usuarioOptional.isEmpty()) {
-                return ResponseEntity.notFound().build();
+            //comprobar existencia previa
+            if (!usuarioService.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
 
-            Usuario usuario = usuarioOptional.get();
+            Usuario actualizado = usuarioService.updateUsuario(id, dto);
             
-            // Actualizar campos
-            if (usuarioDetails.getNombre() != null) usuario.setNombre(usuarioDetails.getNombre());
-            if (usuarioDetails.getEmail() != null) usuario.setEmail(usuarioDetails.getEmail());
-            if (usuarioDetails.getUsuario() != null) usuario.setUsuario(usuarioDetails.getUsuario());
-            if (usuarioDetails.getPassword() != null) {
-                usuario.setPassword(passwordEncoder.encode(usuarioDetails.getPassword()));
+            if (actualizado == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
-            if (usuarioDetails.getNegocio() != null) usuario.setNegocio(usuarioDetails.getNegocio());
-            
-            
+            return ResponseEntity.ok(actualizado);
 
-            Usuario usuarioActualizado = usuarioService.updateUsuario(id, usuario);
-            return ResponseEntity.ok(usuarioActualizado);
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar usuario: " + e.getMessage());
+            
+        } catch (IllegalArgumentException  e) {
+            // errores de validación de negocio
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar usuario: " + e.getMessage());
         }
     }
 
