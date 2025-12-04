@@ -25,6 +25,5 @@ public class UsuarioEdicionDTO {
     @Size(min = 8, message = "La contraseña debe tener mínimo 8 caracteres")
     private String password;
 
-    @Size(max = 150, message = "Negocio: máximo 150 caracteres")
-    private String negocio;
+
 }

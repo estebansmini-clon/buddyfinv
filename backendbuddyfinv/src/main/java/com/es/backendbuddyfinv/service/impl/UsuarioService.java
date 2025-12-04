@@ -122,7 +122,6 @@ public class UsuarioService {
         usuario.setNombre(dto.getNombre());
         usuario.setEmail(dto.getEmail());
         usuario.setUsuario(dto.getUsuario());
-        usuario.setNegocio(dto.getNegocio());
 
         // guardar
         return usuarioRepository.save(usuario);
