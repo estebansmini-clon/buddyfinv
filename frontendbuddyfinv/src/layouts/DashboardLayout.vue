@@ -36,10 +36,10 @@
         </button>
 
       </nav>
-      <button class="cerrar-sesion" @click="confirmLogout = true ">
+        <button class="cerrar-sesion" @click="confirmLogout = true ">
         <IconCerrarSesion />
-        <span>CERRAR SESION</span>
-      </button>
+        <span>CERRAR SESIÓN</span>
+        </button>
     </aside>
 
     <main class="contenido">
@@ -192,6 +192,8 @@ export default {
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
+
+
 .logo {
   font-size: 1.9rem;
   color: #d35400;
@@ -256,8 +258,10 @@ nav button:hover {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 30rem;
-  width: 100%;
+  position: absolute;
+  bottom: 1rem;
+
+  width: 11vw;
   justify-content: center;
 }
 
