@@ -25,14 +25,14 @@
         
         <button @click="ir('Graficos')" :class="{ activo: ruta === 'Graficos' }">
           <IconGraficas />
-          <span>GRAFICAS</span>
+          <span>GRÁFICAS</span>
         </button>
         <div class="separator"></div>
 
            <!-- Juan daviiiiiiiiiiiid modifique este boton que lo que hace es que me redirija al dashboardconfiguracion  -->
         <button @click="ir('dashboardConfiguracion')" :class="{ activo: ruta === 'dashboardConfiguracion' }">
           <IconConfiguracion />
-          <span>CONFIGURACION</span>
+          <span>CONFIGURACIÓN</span>
         </button>
 
       </nav>
