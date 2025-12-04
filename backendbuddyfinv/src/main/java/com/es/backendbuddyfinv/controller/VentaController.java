@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.es.backendbuddyfinv.dto.ProductoEstrellaDTO;
 import com.es.backendbuddyfinv.dto.VentaCrearDTO;
 import com.es.backendbuddyfinv.dto.VentaDetalladaDTO;
 import com.es.backendbuddyfinv.dto.VentaResponseDTO;
+import com.es.backendbuddyfinv.dto.VentasSerieDTO;
 import com.es.backendbuddyfinv.model.Venta;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
 import com.es.backendbuddyfinv.service.impl.VentaService;
@@ -31,7 +32,42 @@ public class VentaController {
     @Autowired
     private VentaService ventaService;
 
-    
+
+    /////////////santiago
+    @GetMapping("/graficos")
+    public ResponseEntity<List<VentasSerieDTO>> obtenerVentasGraficos() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long idPropietario = userDetails.getIdUsuario();
+
+        List<VentasSerieDTO> ventasSerie = ventaService.graficos(idPropietario);
+
+        return ResponseEntity.ok(ventasSerie);
+    }
+
+    @GetMapping("/graficos/productos-estrella")
+public ResponseEntity<List<ProductoEstrellaDTO>> obtenerProductosEstrella() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null || !authentication.isAuthenticated()) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+    Long idPropietario = userDetails.getIdUsuario();
+
+    List<ProductoEstrellaDTO> productos = ventaService.graficosProductosEstrella(idPropietario);
+
+    return ResponseEntity.ok(productos);
+}
+
+////////////////////////fin santiago 
+
     @GetMapping("/detalladas")
     public ResponseEntity<List<VentaDetalladaDTO>> obtenerVentasDetalladas() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

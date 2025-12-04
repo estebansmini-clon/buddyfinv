@@ -29,7 +29,7 @@ import com.es.backendbuddyfinv.service.impl.EgresoService;
 import com.es.backendbuddyfinv.service.impl.MetodoPagoService;
 import com.es.backendbuddyfinv.service.impl.TipoEgresoService;
 import com.es.backendbuddyfinv.service.impl.UsuarioService;
-
+import com.es.backendbuddyfinv.dto.GastoTipoEgresoDTO;
 
 
 
@@ -201,6 +201,22 @@ public class EgresoController {
         }
     }
     
+    //////////////santiago
+        @GetMapping("/graficosGastos")
+        public ResponseEntity<List<GastoTipoEgresoDTO>> graficosGastos() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long idPropietario = userDetails.getIdUsuario();
+
+        List<GastoTipoEgresoDTO> gastos = egresoService.graficosGastos(idPropietario);
+
+        return ResponseEntity.ok(gastos);
+    }
 
   
 

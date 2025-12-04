@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.es.backendbuddyfinv.dto.EgresoDTO;
+import com.es.backendbuddyfinv.dto.GastoTipoEgresoDTO;
 import com.es.backendbuddyfinv.model.Egreso;
 import com.es.backendbuddyfinv.repository.EgresoRepository;
 
@@ -18,8 +19,22 @@ public class EgresoService {
 
 
     @Autowired
-    private EgresoRepository egresoRepository;
+    private EgresoRepository egresoRepository;  
 
+    //////////////santiago
+    public List<GastoTipoEgresoDTO> graficosGastos(Long idPropietario) {
+        List<Object[]> results = egresoRepository.findGastosPorCategoria(idPropietario);
+    
+        return results.stream()
+        .map(row -> new GastoTipoEgresoDTO(
+            (String) row[0],
+            ((Number) row[1]).doubleValue()
+        ))
+            .collect(Collectors.toList());
+    }
+    /////////////////////fin santiago
+
+    
     // Crear un nuevo egreso
     public Egreso createEgreso(Egreso egreso) {
         return egresoRepository.save(egreso);
