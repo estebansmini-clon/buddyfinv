@@ -1,7 +1,7 @@
 <template>
     <div class="graficos-container">
   
-      <h1 class="titulo">GRAFICAS</h1>
+      <h1 class="titulo">GRÁFICAS</h1>
       <p class="descripcion">Visualiza tus ventas, productos estrella y gastos de forma cómoda y eficaz.</p>
   
       <div class="grid-graficos">
@@ -234,9 +234,10 @@ this.chartConfigs.productos = {
   };
   </script>
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 .graficos-container {
   padding: 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .titulo {
@@ -244,18 +245,18 @@ this.chartConfigs.productos = {
   font-weight: 700;
   margin-bottom: 5px;
   letter-spacing: 1px;
-  color: #e67e22; /* naranja pastel */
+  color: #333; 
 }
 
 .descripcion {
   font-size: 14px;
   opacity: 0.8;
   margin-bottom: 30px;
+  color: #333;
 }
 
 .grid-graficos {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   gap: 20px;
 }
 

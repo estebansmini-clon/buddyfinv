@@ -213,7 +213,7 @@
       
       <div class="detalles">
           
-          <div v-if="detallesSeleccionados.length === 0" class="muted">No hay productos seleccionados</div>
+          <div v-if="detallesSeleccionados.length === 0" class="muted">Añade productos desde el recuadro Buscar</div>
 
           <div
             class="detalle-row"
