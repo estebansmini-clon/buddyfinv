@@ -60,13 +60,16 @@ public class SecurityConfig {
                 .requestMatchers("/productos/**").authenticated() 
                 .requestMatchers("/ventas/detalladas").hasRole("ADMIN")
                 .requestMatchers("ventas/crearVenta").authenticated()
-
-                .requestMatchers("/Egresos/**").authenticated()
-                .requestMatchers("/ingresos/**").permitAll()
-                .requestMatchers("/tipo-egresos/**").permitAll()
+                .requestMatchers("ventas/graficos").hasRole("ADMIN")
+                .requestMatchers("ventas/graficos/productos-estrella").hasRole("ADMIN")
+            
+                .requestMatchers("Egresos/graficosGastos").hasRole("ADMIN")
+                .requestMatchers("/Egresos/**").hasRole("ADMIN")
+                .requestMatchers("/ingresos/**").hasRole("ADMIN")
+                .requestMatchers("/tipo-egresos/**").authenticated()
                 .requestMatchers("/tipo-producto/**").hasRole("ADMIN")
                 .requestMatchers("/estado-producto/**").authenticated()
-                .requestMatchers("/MetodoPago/**").permitAll()
+                .requestMatchers("/metodo-pagos/**").authenticated()
             ).addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class)
 
             .build();

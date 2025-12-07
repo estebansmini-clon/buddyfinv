@@ -16,6 +16,7 @@ import ConfiguracionEliminarUsuario from '../components/configuracionEliminarUsu
 import AgregarEmpleadoView from '@/views/AgregarEmpleadoView.vue'
 import ListaEmpleadosView from '@/views/ListaEmpleadosView.vue'
 
+import GraficosView from '@/views/GraficosView.vue'
 
 const routes = [
   {
@@ -32,22 +33,26 @@ const routes = [
     name: 'Login',
     component: () => import('../views/LoginView.vue')
   },
-    {
-  path: '/dashboard',
-  component: DashboardLayout,
-  redirect: '/dashboard/dashboard',
-  meta: { requiresAuth: true }, // ← aquí
-  children: [
-    { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
-    { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
-    { path: 'ingresos', name: 'Ingresos', component: IngresoTable, meta: { requiresAuth: true } },
-    { path: 'egresos', name: 'Egresos', component: EgresoView, meta: { requiresAuth: true } },
-    {
-      path: 'inventario',
-      name: 'inventario',
-      component: ProductoView,
-      meta: { requiresAuth: true },
-      children: [
+  {
+    path: '/dashboard',
+    component: DashboardLayout,
+    redirect: '/dashboard/dashboard',
+    meta: { requiresAuth: true },
+    children: [
+      { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
+      { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
+      { path: 'ingresos', name: 'Ingresos', component: IngresoTable, meta: { requiresAuth: true } },
+      { path: 'egresos', name: 'Egresos', component: EgresoView, meta: { requiresAuth: true } },
+
+      // 👉 Nueva ruta para Graficos
+      { path: 'graficos', name: 'Graficos', component: GraficosView, meta: { requiresAuth: true } },
+
+      {
+        path: 'inventario',
+        name: 'inventario',
+        component: ProductoView,
+        meta: { requiresAuth: true },
+        children: [
         { path: 'agregarproducto', name: 'AgregarProducto', component: AgregarProductoView, meta: { requiresAuth: true } },
         { path: 'modificarproducto', name: 'ModificarProducto', component: ModificarProductoView, meta: { requiresAuth: true } },
         { path: 'reabastecerproducto', name: 'ReabastecerProducto', component: ReabastecerProductoView, meta: { requiresAuth: true } }
@@ -139,10 +144,6 @@ const routes = [
     children: [
       { path: 'dashboard', name: 'dashboard', component: DashboardOpciones, meta: { requiresAuth: true } },
 
-      // Ventas listado global (opcional). Si prefieres mantener solo la ruta dentro de acciones, puedes comentar/eliminar esta línea.
-      // { path: 'ventas', name: 'Ventas', component: VentaView, meta: { requiresAuth: true } },
-
-      // Acciones (parent) con children: RegistrarVentas y listado de ventas dentro de Acciones
       {
         path: 'acciones',
         name: 'acciones',
@@ -159,6 +160,12 @@ const routes = [
             path: 'ventas',
             name: 'Ventas',
             component: () => import('@/views/VentaView.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'consultar-venta',
+            name: 'ConsultarVenta',
+            component: () => import('@/views/ConsultarVentaView.vue'),
             meta: { requiresAuth: true }
           }
         ]
@@ -217,7 +224,29 @@ const routes = [
         meta: { requiresAuth: true }
       }
     ]
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPasswordView.vue')
+  },
+  {
+    path: '/verify-code',
+    name: 'verify-code',
+    component: () => import('@/views/VerifyCodeView.vue')
+  },
+  {
+    path: '/reset-password',
+    name: 'change-password',
+    component: () => import('@/views/ChangePasswordView.vue')
+  },
+  {
+    path: "/recuperar-usuario",
+    name: "recover-username",
+    component: () => import("@/views/RecoveryUsernameView.vue")
   }
+  
+  
 ]
 
 const router = createRouter({

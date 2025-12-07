@@ -16,15 +16,23 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByUsuario(String usuario);
     boolean existsByEmail(String email);
     boolean existsByUsuarioOrEmail(String usuario, String email);
-    Usuario findByEmail(String email);
+    //David solarte mifico el buscar por email (pasa a ser optional)
+    Optional <Usuario> findByEmail(String email);
     //esteban moreno uso este metodo para crear ventas
     Optional<Usuario> findByUsuario(String usuario);
 
     List<Usuario> findByAdministradorId(Long idAdministrador);
     
+    //David Solarte creó este metodo para buscar username o email
+    Optional<Usuario> findByUsuarioOrEmail(String usuario, String email);
+    
     boolean existsByNitUsuario(String nitUsuario);
     boolean existsByNombre(String nombre);
     boolean existsByNegocio(String negocio);
+
+    //David Solarte Creo esto para la hu editar usuario
+    boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByUsuarioAndIdNot(String usuario, Long id);
 
     @Query("SELECT new com.es.backendbuddyfinv.dto.UsuarioDTOfind(u.id,u.nitUsuario, u.nombre, u.email, u.usuario) " +
     "FROM Usuario u WHERE u.administrador.id = :idPropietario")

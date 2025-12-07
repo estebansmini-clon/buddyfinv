@@ -5,10 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.es.backendbuddyfinv.dto.UsuarioCrearDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
+import com.es.backendbuddyfinv.dto.UsuarioEdicionDTO;
 import com.es.backendbuddyfinv.model.Rol;
 import com.es.backendbuddyfinv.model.Usuario;
 import com.es.backendbuddyfinv.repository.RolRepository;
@@ -18,13 +21,30 @@ import com.es.backendbuddyfinv.repository.UsuarioRepository;
 public class UsuarioService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
     private RolRepository rolRepository;
 
+    UsuarioService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public Usuario findByUsuario(String username) {
         return usuarioRepository.findByUsuario(username)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
+    //David Solarte crea el metodo para buscar por usuario o email
+    public Optional<Usuario> findByUsuarioOrEmail(String usuarioOrEmail){
+        return usuarioRepository.findByUsuarioOrEmail(usuarioOrEmail, usuarioOrEmail);
+    }
+    //David Solarte crea el metodo para actualizar password(hasheada)
+    public void actualizarPassword(Usuario usuario, String nuevaPassword){
+        usuario.setPassword(passwordEncoder.encode(nuevaPassword));
+        usuarioRepository.save(usuario);
     }
 
     // Crear un nuevo usuario
@@ -53,6 +73,58 @@ public class UsuarioService {
             return usuarioRepository.save(usuario);
         }
         return null;
+    }
+    
+    // actualizar usuario de david solarte
+    @Transactional
+    public Usuario updateUsuario(Long id, UsuarioEdicionDTO dto) {
+        Optional<Usuario> optional = usuarioRepository.findById(id);
+        if (optional.isEmpty()) {
+            return null; // controller lo traducirá a 404
+        }
+
+        Usuario usuario = optional.get();
+
+        // validaciones de negocio
+        // 1) Nombre no nulo / longitud (si el frontend envía null o vacío, se puede optar por ignorar o validar como obligado)
+        if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+        if (dto.getNombre().length() > 100) {
+            throw new IllegalArgumentException("El nombre supera los 100 caracteres");
+        }
+
+        // 2) Email: formato ya validado por DTO, ahora comprobar duplicado excluyendo este id
+        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("El email no puede estar vacío");
+        }
+        if (usuarioRepository.existsByEmailAndIdNot(dto.getEmail(), id)) {
+            throw new IllegalArgumentException("El email ingresado ya está asociado a otro usuario");
+        }
+
+        // 3) Usuario (username) duplicado
+        if (dto.getUsuario() == null || dto.getUsuario().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario no puede estar vacío");
+        }
+        if (usuarioRepository.existsByUsuarioAndIdNot(dto.getUsuario(), id)) {
+            throw new IllegalArgumentException("El nombre de usuario no está disponible");
+        }
+
+        // 4) Contraseña: si vino, validar longitud mínima y codificar
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            if (dto.getPassword().length() < 8) {
+                throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres");
+            }
+            usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        // 5) Actualizar campos (no tocamos nitUsuario)
+        usuario.setNombre(dto.getNombre());
+        usuario.setEmail(dto.getEmail());
+        usuario.setUsuario(dto.getUsuario());
+
+        // guardar
+        return usuarioRepository.save(usuario);
     }
 
     public Usuario crearEmpleado(Long idAdmin, UsuarioCrearDTO dto){

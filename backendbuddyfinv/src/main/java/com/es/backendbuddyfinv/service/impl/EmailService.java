@@ -24,5 +24,31 @@ public class EmailService {
         mensaje.setFrom("buddyfinv.software@gmail.com");
         mailSender.send(mensaje);
     }
+
+    public void enviarCodigoRecuperacion(String destinatario, String codigo){
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(destinatario);
+        mensaje.setSubject("Código de recuperación - BuddyFinv");
+        mensaje.setText("Has solicitado recuperar tu contraseña.\n\n" + 
+                "Tu código de verificación es: " + codigo + "\n\n" + 
+                "Este código expira en 5 minutos. Si no solicitaste esto, ignora este correo.");
+        mensaje.setFrom("buddyfinv.software@gmail.com");
+        mailSender.send(mensaje);
+    }
+
+    public void sendUsernameRecoveryEmail(String emailDestino, String username){
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(emailDestino);
+        mensaje.setSubject("Recuperación de nombre de usuario - BuddyFinv");
+
+        mensaje.setText("Hola,\n\n"
+                + "Has solicitado recuperar tu nombre de usuario.\n\n"
+                + "Tu nombre de usuario registrado es: " + username + "\n\n"
+                + "Si no realizaste esta solicitud, puedes ignorar este mensaje.\n\n"
+                + "Equipo BuddyFinv");
+
+        mensaje.setFrom("buddyfinv.software@gmail.com");
+        mailSender.send(mensaje);
+    }
     
 }

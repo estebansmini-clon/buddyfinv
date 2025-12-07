@@ -12,7 +12,17 @@ import com.es.backendbuddyfinv.model.Egreso;
 
 @Repository
 public interface EgresoRepository extends JpaRepository<Egreso, Long> {
-    
+    //////////////santiago
+    @Query("""
+        SELECT e.tipoEgreso.descripcion, SUM(e.costo)
+        FROM Egreso e
+        WHERE e.propietario.id = :idPropietario
+        GROUP BY e.tipoEgreso.descripcion
+        ORDER BY SUM(e.costo) DESC
+    """)
+    List<Object[]> findGastosPorCategoria(@Param("idPropietario") Long idPropietario);
+
+    ///////////////fin santiago
     
     
     @Query("""
@@ -39,6 +49,30 @@ List<Egreso> findByPropietario(@Param("idPropietario") Long idPropietario);
 
     @Query("SELECT SUM(e.costo) AS egresoTotal FROM Egreso e WHERE e.propietario.id = :idPropietario")
     Double sumEgresosByPropietarioId(@Param("idPropietario") Long idPropietario);
+
+
+
+
+    @Query("SELECT e FROM Egreso e " +
+    "JOIN FETCH e.tipoEgreso te " +
+    "JOIN FETCH e.metodoPago mp " +
+    "WHERE e.propietario.id = :idPropietario " +
+    "AND e.fecha BETWEEN :fechaInicio AND :fechaFin " +
+    "AND (:categoria IS NULL OR te.descripcion = :categoria) " +
+    "AND (:metodoPago IS NULL OR mp.descripcion = :metodoPago)")
+List<Egreso> filtrar(@Param("idPropietario") Long idPropietario,
+                  @Param("fechaInicio") LocalDate fechaInicio,
+                  @Param("fechaFin") LocalDate fechaFin,
+                  @Param("categoria") String categoria,
+                  @Param("metodoPago") String metodoPago);
+
+
+
+
+
+
+
+
 
 
     @Query("""

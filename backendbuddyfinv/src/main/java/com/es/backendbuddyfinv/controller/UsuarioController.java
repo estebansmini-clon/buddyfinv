@@ -9,19 +9,11 @@ import com.es.backendbuddyfinv.dto.UsuarioCrearDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.es.backendbuddyfinv.dto.UsuarioDTO;
 import com.es.backendbuddyfinv.dto.UsuarioDTOfind;
+import com.es.backendbuddyfinv.dto.UsuarioEdicionDTO;
+import com.es.backendbuddyfinv.dto.UsuarioResponseDTO;
 import com.es.backendbuddyfinv.model.Usuario;
 import com.es.backendbuddyfinv.security.CustomUserDetails;
 import com.es.backendbuddyfinv.security.JwtUtil;
@@ -111,13 +105,17 @@ public class UsuarioController {
                       .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/agregar")
-    public ResponseEntity<?> crearEmpleado(@Valid @RequestBody UsuarioCrearDTO dto, @RequestHeader("Authorization") String authHeader){
-        long idAdmin= obtenerAdministradorDesdeToken(authHeader);
+    //tuve que crear el DTOresponse para usuario ya que estaba anidando y generaba el error de json /BY ESTEBAN MORENO
+    @PostMapping(value = "/agregar", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsuarioResponseDTO> crearEmpleado(
+        @Valid @RequestBody UsuarioCrearDTO dto,
+        @RequestHeader("Authorization") String authHeader) {
 
+        long idAdmin = obtenerAdministradorDesdeToken(authHeader);
         Usuario nuevoEmpleado = usuarioService.crearEmpleado(idAdmin, dto);
 
-        return ResponseEntity.ok(nuevoEmpleado);
+        UsuarioResponseDTO resp = UsuarioResponseDTO.fromEntity(nuevoEmpleado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @GetMapping("/empleados")
@@ -129,33 +127,30 @@ public class UsuarioController {
     }
 
     // Actualizar usuario
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetails) {
+    @PutMapping("update/{id}")
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id,
+                                            @Valid @RequestBody UsuarioEdicionDTO dto) {
         try {
-            Optional<Usuario> usuarioOptional = usuarioService.getUsuarioById(id);
-            
-            if (usuarioOptional.isEmpty()) {
-                return ResponseEntity.notFound().build();
+            if (!usuarioService.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
 
-            Usuario usuario = usuarioOptional.get();
-            
-            // Actualizar campos
-            if (usuarioDetails.getNombre() != null) usuario.setNombre(usuarioDetails.getNombre());
-            if (usuarioDetails.getEmail() != null) usuario.setEmail(usuarioDetails.getEmail());
-            if (usuarioDetails.getUsuario() != null) usuario.setUsuario(usuarioDetails.getUsuario());
-            if (usuarioDetails.getPassword() != null) {
-                usuario.setPassword(passwordEncoder.encode(usuarioDetails.getPassword()));
+            Usuario actualizado = usuarioService.updateUsuario(id, dto);
+
+            if (actualizado == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
             }
-            if (usuarioDetails.getNegocio() != null) usuario.setNegocio(usuarioDetails.getNegocio());
-            
-            
 
-            Usuario usuarioActualizado = usuarioService.updateUsuario(id, usuario);
-            return ResponseEntity.ok(usuarioActualizado);
+            // Aquí usas tu DTO de respuesta
+            UsuarioResponseDTO resp = UsuarioResponseDTO.fromEntity(actualizado);
+            return ResponseEntity.ok(resp);
 
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al actualizar usuario: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Error al actualizar usuario: " + e.getMessage());
         }
     }
 
